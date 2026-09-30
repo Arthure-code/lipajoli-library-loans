@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 
 namespace BibliothequeLIPAJOLI.Models
 {
-    [Index(nameof(UsagerID), nameof(LivreID), IsUnique = true)] // Créer un index sur ces deux champs et les rend unique
+    // Un usager peut reemprunter un livre qu'il a deja rendu : l'index
+    // accelere la recherche de ses emprunts sans interdire le second.
+    [Index(nameof(UsagerID), nameof(LivreID))]
     public class Emprunt
     {
         [Key]
@@ -22,14 +24,16 @@ namespace BibliothequeLIPAJOLI.Models
         [Display(Name = "ID du livre")]
         public int LivreID { get; set; }
 
-        [Required(ErrorMessage = "Le champ est obligatoire")]  // AVF TP3 égal au DateTime.Today()
+        [Required(ErrorMessage = "Le champ est obligatoire")]
         [Display(Name = "Date d'emprunt")]
         [DataType(DataType.Date)]
         public DateTime DateEmprunt { get; set; }
 
         [Display(Name = "Date de retour attendu")]
         [DataType(DataType.Date)]
-        public DateTime DateRetourLimite { get; set; } // AVF TP3 égal à DateEmprunt + NbJourIndiqueDansFichierConfiguration calculé en lien au temps autorisé pour l'emprunt
+        // La date limite se calcule a l'emprunt, a partir de la duree lue
+        // dans la configuration.
+        public DateTime DateRetourLimite { get; set; }
 
         [Display(Name = "Date de retour")]
         [DataType(DataType.Date)]

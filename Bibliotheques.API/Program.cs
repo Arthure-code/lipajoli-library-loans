@@ -24,17 +24,16 @@ namespace Bibliotheques.API
                 {
                     Title = "API Emprunt",
                     Version = "v1",
-                    Description = "API TP4 POO3",
+                    Description = "Gestion des emprunts de la bibliothèque LIPAJOLI",
                     License = new OpenApiLicense
                     {
-                        Name = "Apache 2.0",
-                        Url = new Uri("http://www.apache.org")
+                        Name = "MIT",
+                        Url = new Uri("https://opensource.org/licenses/MIT")
                     },
                     Contact = new OpenApiContact
                     {
-                        Name = "Arthure LEKOUBOU DJUNE",
-                        Email = "2393288@cegeplimoilou.ca",
-                        Url = new Uri("https://www.cegeplimoilou.ca/")
+                        Name = "Arthure Lekoubou Djune",
+                        Url = new Uri("https://github.com/Arthure-code")
                     }
                 });
 
