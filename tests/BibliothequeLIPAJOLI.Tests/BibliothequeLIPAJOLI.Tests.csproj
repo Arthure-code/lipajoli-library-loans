@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\BibliothequeLIPAJOLI\BibliothequeLIPAJOLI.csproj" />
+    <ProjectReference Include="..\..\src\BibliothequeLIPAJOLI\BibliothequeLIPAJOLI.csproj" />
   </ItemGroup>
 
 </Project>

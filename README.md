@@ -51,14 +51,14 @@ ASP.NET Core 8, Entity Framework Core 8, SQLite, Swagger. The site is in French.
 The web application creates the SQLite file and fills it on its first run, so start it first.
 
 ```bash
-cd BibliothequeLIPAJOLI
+cd src/BibliothequeLIPAJOLI
 dotnet run
 ```
 
 Then, in a second terminal, the API the application talks to:
 
 ```bash
-cd Bibliotheques.API
+cd src/Bibliotheques.API
 dotnet run
 ```
 
