@@ -1,7 +1,5 @@
 ﻿using Bibliotheques.ApplicationCore.Entites;
 using Bibliotheques.ApplicationCore.Interfaces;
-using Bibliotheques.Infrastructure.Data;
-
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Etudiants.Infrastructure.Data
+namespace Bibliotheques.Infrastructure.Data
 {
     public class AsyncRepository<TBaseEntity> : IAsyncRepository<TBaseEntity> where TBaseEntity : BaseEntity
     {
