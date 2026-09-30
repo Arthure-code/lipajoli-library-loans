@@ -16,9 +16,9 @@ namespace Bibliotheques.ApplicationCore.Entites
     {
         public int No { get; set; }
 
-        public string Nom { get; set; }
+        public string Nom { get; set; } = string.Empty;
 
-        public string Prenom { get; set; }
+        public string Prenom { get; set; } = string.Empty;
 
         public Statut Statut { get; set; }
 

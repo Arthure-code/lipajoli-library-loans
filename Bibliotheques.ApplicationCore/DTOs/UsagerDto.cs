@@ -11,10 +11,10 @@ namespace Bibliotheques.ApplicationCore.DTOs
     {
         public int Id { get; set; }
         public int No { get; set; }
-        public string Nom { get; set; }
-        public string Prenom { get; set; }
+        public string Nom { get; set; } = string.Empty;
+        public string Prenom { get; set; } = string.Empty;
         public Statut Statut { get; set; }
         public int Defaillance { get; set; }
-        public string Courriel { get; set; }
+        public string? Courriel { get; set; }
     }
 }

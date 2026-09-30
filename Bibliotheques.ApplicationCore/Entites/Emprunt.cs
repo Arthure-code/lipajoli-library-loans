@@ -22,7 +22,7 @@ namespace Bibliotheques.ApplicationCore.Entites
         public DateTime? DateRetour { get; set; } // Sera absente à l'instanciation car elle correspond a la date de retour du livre par l'Usager
 
         // Propriété navigation .....
-        public virtual Usager Usager { get; set; }
-        public virtual Livre Livre { get; set; }
+        public virtual Usager? Usager { get; set; }
+        public virtual Livre? Livre { get; set; }
     }
 }

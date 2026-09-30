@@ -1,4 +1,4 @@
-using BibliothequeLIPAJOLI.Data;
+﻿using BibliothequeLIPAJOLI.Data;
 using BibliothequeLIPAJOLI.Interfaces;
 using BibliothequeLIPAJOLI.Services;
 using Microsoft.AspNetCore.Builder;
@@ -16,14 +16,17 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 
 builder.Services.AddControllersWithViews();
 
+string adresseDeLApi = builder.Configuration.GetValue<string>("urlAPI")
+    ?? throw new InvalidOperationException("L'adresse de l'API est absente de la configuration.");
+
 builder.Services.AddHttpClient<IEmpruntsService, EmpruntsServiceProxy>(client => client.BaseAddress =
-      new Uri(builder.Configuration.GetValue<string>("urlAPI")));
+      new Uri(adresseDeLApi));
 
 builder.Services.AddHttpClient<ILivresServiceProxy, LivresServiceProxy>(client => client.BaseAddress =
-      new Uri(builder.Configuration.GetValue<string>("urlAPI")));
+      new Uri(adresseDeLApi));
 
 builder.Services.AddHttpClient<IUsagersServiceProxy, UsagersServiceProxy>(client => client.BaseAddress =
-      new Uri(builder.Configuration.GetValue<string>("urlAPI")));
+      new Uri(adresseDeLApi));
 
 
 builder.Services.AddDbContext<BibliothequeContext>(options =>

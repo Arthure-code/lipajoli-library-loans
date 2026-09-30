@@ -24,13 +24,13 @@ namespace BibliothequeLIPAJOLI.Models
         [Required(ErrorMessage = "Le champ est obligatoire")]
         [DataType(DataType.Text)]
         [MaxLength(50, ErrorMessage = "La taille maximale du champ est de 50 caractères")]
-        public string Nom { get; set; }
+        public string Nom { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Le champ est obligatoire")]
         [DataType(DataType.Text)]
         [Display(Name = "Prénom")]
         [MaxLength(50, ErrorMessage = "La taille maximale du champ est de 50 caractères")]
-        public string Prenom { get; set; }
+        public string Prenom { get; set; } = string.Empty;
 
         [DisplayFormat(NullDisplayText = "Choisir un statut")]
         [Required(ErrorMessage = "Le champ est obligatoire")]

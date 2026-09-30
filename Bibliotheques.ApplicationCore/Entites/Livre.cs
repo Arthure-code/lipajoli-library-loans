@@ -13,13 +13,13 @@ namespace Bibliotheques.ApplicationCore.Entites
     public class Livre : BaseEntity
     {
         public string? CodeUnique { get; set; }
-        public string Isbn10 { get; set; }
-        public string Isbn13 { get; set; }
-        public string Titre { get; set; }
+        public string Isbn10 { get; set; } = string.Empty;
+        public string Isbn13 { get; set; } = string.Empty;
+        public string Titre { get; set; } = string.Empty;
         public int Quantite { get; set; }
         public double Prix { get; set; }
         public string? Auteurs { get; set; }
-        public string Categorie { get; set; }
+        public string Categorie { get; set; } = string.Empty;
 
         public virtual ICollection<Emprunt>? Emprunts { get; set; }
 

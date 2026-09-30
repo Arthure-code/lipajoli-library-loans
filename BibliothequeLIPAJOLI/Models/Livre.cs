@@ -24,19 +24,19 @@ namespace BibliothequeLIPAJOLI.Models
         [DataType(DataType.Text)]
         [Display(Name = "ISBN-10")]
         [RegularExpression(@"(?=[0-9X]{10}$|(?=(?:[0-9]+[-\ ]){3})[-\ 0-9X]{13}$)[0-9]{1,5}[-\]?[0-9]+[-\]?[0-9]+[-\]?[0-9X]$", ErrorMessage = "Vous devez entrer une valeur de ISBN10 valide. Il est possible de séparer les caractères avec un trait d'union.")]
-        public string Isbn10 { get; set; }
+        public string Isbn10 { get; set; } = string.Empty;
 
 
         [Required(ErrorMessage = "Le champ est obligatoire")]
         [DataType(DataType.Text)]
         [Display(Name = "ISBN-13")]
         [RegularExpression(@"(?=[0-9]{13}$|(?=(?:[0-9]+[-\ ]){4})[-\ 0-9]{17}$)97[89][-\ ]?[0-9]{1,5}[-\ ]?[0-9]+[-\ ]?[0-9]+[-\ ]?[0-9]$", ErrorMessage = "Vous devez entrer une valeur de ISBN13 valide. Il est possible de séparer les caractères avec un trait d'union.")]
-        public string Isbn13 { get; set; }
+        public string Isbn13 { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Le champ est obligatoire")]
         [DataType(DataType.Text)]
         [MaxLength(80, ErrorMessage = "La taille maximale du champ est de 80 caractères")]
-        public string Titre { get; set; }
+        public string Titre { get; set; } = string.Empty;
 
         [Display(Name = "Quantité")]
         [Required(ErrorMessage = "Le champ est obligatoire")]
@@ -55,7 +55,7 @@ namespace BibliothequeLIPAJOLI.Models
         [Display(Name = "Catégorie")]
         [Required(ErrorMessage = "Le champ est obligatoire")]
         [DataType(DataType.Text)]
-        public string Categorie { get; set; }
+        public string Categorie { get; set; } = string.Empty;
 
         public virtual ICollection<Emprunt>? Emprunts { get; set; }
 

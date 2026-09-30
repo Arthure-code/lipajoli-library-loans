@@ -31,7 +31,7 @@ namespace Bibliotheques.ApplicationCore.Services
             return _empruntRepository.ListAsync();
         }
 
-        public Task<Emprunt> ObtenirUnEmpruntParId(int id)
+        public Task<Emprunt?> ObtenirUnEmpruntParId(int id)
         {
             return _empruntRepository.GetByIdAsync(id);
         }
@@ -72,7 +72,7 @@ namespace Bibliotheques.ApplicationCore.Services
             await _livreRepository.EditAsync(livre);
         }
 
-        public async Task<Emprunt> InscrireUnNouvelEmprunt(Usager usager, Livre livre)
+        public async Task<Emprunt?> InscrireUnNouvelEmprunt(Usager usager, Livre livre)
         {
             
             var usagerSuivi = await _usagerRepository.GetByIdAsync(usager.ID);
@@ -110,7 +110,7 @@ namespace Bibliotheques.ApplicationCore.Services
             return nouvelEmprunt;
         }
 
-        public async Task<Emprunt> RetournerUnEmprunt(Usager usager, Livre livreInput)
+        public async Task<Emprunt?> RetournerUnEmprunt(Usager usager, Livre livreInput)
         {
             if (usager == null || livreInput == null || string.IsNullOrWhiteSpace(livreInput.CodeUnique))
                 return null;

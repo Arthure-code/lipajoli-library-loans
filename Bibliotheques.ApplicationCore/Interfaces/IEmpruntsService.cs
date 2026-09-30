@@ -10,9 +10,9 @@ namespace Bibliotheques.ApplicationCore.Interfaces
     public interface IEmpruntsService
     {
         Task<IEnumerable<Emprunt>> ObtenirToutEmprunts();
-        Task<Emprunt> InscrireUnNouvelEmprunt(Usager usager, Livre livre);
-        Task<Emprunt> ObtenirUnEmpruntParId(int id);
-        Task<Emprunt> RetournerUnEmprunt(Usager usager, Livre codeUnique);
+        Task<Emprunt?> InscrireUnNouvelEmprunt(Usager usager, Livre livre);
+        Task<Emprunt?> ObtenirUnEmpruntParId(int id);
+        Task<Emprunt?> RetournerUnEmprunt(Usager usager, Livre livre);
         Task SupprimerUnEmprunt(Emprunt emprunt);
     }
 }

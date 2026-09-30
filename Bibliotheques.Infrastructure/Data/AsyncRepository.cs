@@ -36,7 +36,7 @@ namespace Bibliotheques.Infrastructure.Data
             await _dbContext.SaveChangesAsync();
         }
 
-        public virtual async Task<TBaseEntity> GetByIdAsync(int id)
+        public virtual async Task<TBaseEntity?> GetByIdAsync(int id)
         {
             return await _dbContext.Set<TBaseEntity>().FindAsync(id);
         }
