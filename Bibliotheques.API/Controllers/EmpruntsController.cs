@@ -13,13 +13,10 @@ namespace Bibliotheques.API.Controllers
     public class EmpruntsController : ControllerBase
     {
         private readonly IEmpruntsService _empruntsService;
-        private readonly IUsagersService _usagersService;
-        private readonly ILivresService _livresService;
-        public EmpruntsController(IEmpruntsService empruntsService, IUsagersService usagersService, ILivresService livresService)
+
+        public EmpruntsController(IEmpruntsService empruntsService)
         {
             _empruntsService = empruntsService;
-            _usagersService = usagersService;
-            _livresService = livresService;
         }
 
 
