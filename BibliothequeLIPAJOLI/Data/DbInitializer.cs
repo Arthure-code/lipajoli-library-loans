@@ -33,10 +33,10 @@ namespace BibliothequeLIPAJOLI.Data
 
             var livres = new Livre[]
             {
-            new Livre{Titre="Anna Karenina", Auteurs="Tolstoy",Categorie="Fiction", CodeUnique="FIC004", Isbn10="0393966429", Isbn13="9780393966428", Prix=10.99, Quantite=2},
-            new Livre{Titre="L'école des femmes", Auteurs="Molière",Categorie="Fiction", CodeUnique="FIC003", Isbn10="0151795800", Isbn13="9780151795802", Prix=6.99, Quantite=6},
-            new Livre{Titre="Test 2 auteurs", Auteurs="Tolstoy" + "," + " " + "Molière",Categorie="Fiction", CodeUnique="FIC001", Isbn10="3770121880", Isbn13="9783770121885", Prix=0.99, Quantite=666},
-            new Livre{Titre="Guerre et Paix", Auteurs="Tolstoy",Categorie="Fiction", CodeUnique="FIC002", Isbn10="8804682590", Isbn13="9788804682592", Prix=12.99, Quantite=4}
+            new Livre{Titre="Anna Karenina", Auteurs="Tolstoy",Categorie="Fiction", CodeUnique="FIC004", Isbn10="0393966429", Isbn13="9780393966428", Prix=10.99m, Quantite=2},
+            new Livre{Titre="L'école des femmes", Auteurs="Molière",Categorie="Fiction", CodeUnique="FIC003", Isbn10="0151795800", Isbn13="9780151795802", Prix=6.99m, Quantite=6},
+            new Livre{Titre="Test 2 auteurs", Auteurs="Tolstoy" + "," + " " + "Molière",Categorie="Fiction", CodeUnique="FIC001", Isbn10="3770121880", Isbn13="9783770121885", Prix=0.99m, Quantite=666},
+            new Livre{Titre="Guerre et Paix", Auteurs="Tolstoy",Categorie="Fiction", CodeUnique="FIC002", Isbn10="8804682590", Isbn13="9788804682592", Prix=12.99m, Quantite=4}
             };
             foreach (Livre l in livres)
             {

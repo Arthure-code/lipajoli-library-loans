@@ -156,7 +156,7 @@ namespace Bibliotheques.API.Controllers
             if (empruntDto == null || empruntDto.Usager == null || empruntDto.Livre == null)
                 return BadRequest("Les données de l'usager ou du livre sont manquantes.");
 
-            // 🔁 Mapping manuel des DTOs vers les entités
+            // Mapping manuel des DTO vers les entites
             var usager = new Usager
             {
                 ID = empruntDto.Usager.Id,

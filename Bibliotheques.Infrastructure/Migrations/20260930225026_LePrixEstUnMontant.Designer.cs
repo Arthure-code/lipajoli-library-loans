@@ -3,6 +3,7 @@ using System;
 using Bibliotheques.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bibliotheques.Infrastructure.Migrations
 {
     [DbContext(typeof(EmpruntsContext))]
-    partial class EmpruntsContextModelSnapshot : ModelSnapshot
+    [Migration("20260930225026_LePrixEstUnMontant")]
+    partial class LePrixEstUnMontant
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

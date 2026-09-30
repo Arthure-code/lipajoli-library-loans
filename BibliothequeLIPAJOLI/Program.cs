@@ -1,5 +1,6 @@
 ﻿using BibliothequeLIPAJOLI.Data;
 using BibliothequeLIPAJOLI.Interfaces;
+using BibliothequeLIPAJOLI.Liaison;
 using BibliothequeLIPAJOLI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
@@ -14,7 +15,11 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
     options.DefaultRequestCulture = new RequestCulture("fr-FR");
 });
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    // Le prix s'ecrit a la virgule comme au point.
+    options.ModelBinderProviders.Insert(0, new FournisseurDeLiantDecimal());
+});
 
 string adresseDeLApi = builder.Configuration.GetValue<string>("urlAPI")
     ?? throw new InvalidOperationException("L'adresse de l'API est absente de la configuration.");

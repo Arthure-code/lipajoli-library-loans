@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BibliothequeLIPAJOLI.Validation;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
@@ -45,9 +46,9 @@ namespace BibliothequeLIPAJOLI.Models
 
         [Required(ErrorMessage = "Le champ est obligatoire")]
         [DataType(DataType.Currency)]
-        [RegularExpression(@"^\d+(\.\d{1,2})?$", ErrorMessage = "SVP utilisez ce format: 12.34")] // Créer un nombre à deux décimal
-        [Range(0.00, 9999999999999999.99)]
-        public double Prix { get; set; }
+        [Range(0, double.MaxValue, ErrorMessage = "Le prix ne peut pas être négatif.")]
+        [AuPlusDeuxDecimales(ErrorMessage = "Le prix s'écrit avec au plus deux décimales.")]
+        public decimal Prix { get; set; }
 
         [DataType(DataType.Text)]
         public string? Auteurs { get; set; }
