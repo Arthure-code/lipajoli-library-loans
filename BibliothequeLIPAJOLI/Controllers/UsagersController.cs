@@ -50,7 +50,7 @@ namespace BibliothequeLIPAJOLI.Controllers
             }
 
             var usager = await _context.Usagers
-                .Include(s => s.Emprunts) // On voudra les informations des emprunts
+                .Include(s => s.Emprunts!) // On voudra les informations des emprunts
                     .ThenInclude(e => e.Livre)// On voudra les informations sur le livre associé à l'emprunt
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);

@@ -17,7 +17,7 @@ namespace BibliothequeLIPAJOLI.Services
 
         public async Task<List<UsagerDto>> ObtenirToutUsagers()
         {
-            return await _httpClient.GetFromJsonAsync<List<UsagerDto>>(_baseUrl);
+            return await _httpClient.GetFromJsonAsync<List<UsagerDto>>(_baseUrl) ?? new List<UsagerDto>();
         }
     }
 }

@@ -6,8 +6,8 @@ namespace BibliothequeLIPAJOLI.Interfaces
     {
         Task<List<EmpruntDto>> ObtenirToutEmprunts();
         Task InscrireUnNouvelEmprunt(EmpruntDto empruntDto);
-        public Task<EmpruntDto> ObtenirUnEmpruntParId(int id);
+        public Task<EmpruntDto?> ObtenirUnEmpruntParId(int id);
         Task RetournerUnEmprunt(EmpruntDto empruntDto);
-        public Task SuprimerUnEmprunt(EmpruntDto emprunt);
+        public Task SupprimerUnEmprunt(EmpruntDto emprunt);
     }
 }

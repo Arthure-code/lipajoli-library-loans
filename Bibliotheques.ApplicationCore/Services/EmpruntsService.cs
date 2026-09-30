@@ -38,36 +38,45 @@ namespace Bibliotheques.ApplicationCore.Services
 
         public async Task SupprimerUnEmprunt(Emprunt emprunt)
         {
-            
-            if (emprunt?.Livre == null && emprunt?.Usager != null || string.IsNullOrWhiteSpace(emprunt?.Livre.CodeUnique))
+            // Sans livre, sans usager ou sans code, l'emprunt ne designe rien.
+            if (emprunt?.Livre == null || emprunt.Usager == null
+                || string.IsNullOrWhiteSpace(emprunt.Livre.CodeUnique))
+            {
                 return;
+            }
 
-           
-            var livres = await _livreRepository.ListAsync();
-            var livre = livres.FirstOrDefault(l => l.CodeUnique == emprunt.Livre.CodeUnique);
+            string codeDuLivre = emprunt.Livre.CodeUnique;
+            int numeroDeLUsager = emprunt.Usager.No;
+
+            IEnumerable<Livre> livres = await _livreRepository.ListAsync();
+            Livre? livre = livres.FirstOrDefault(l => l.CodeUnique == codeDuLivre);
             if (livre == null)
+            {
                 return;
+            }
 
-            var usagers = await _usagerRepository.ListAsync();
-                var usagerTrouve = usagers.FirstOrDefault(u => u.No == emprunt.Usager.No);
-                if (usagerTrouve == null)
-                    return;
-            
+            IEnumerable<Usager> usagers = await _usagerRepository.ListAsync();
+            Usager? usagerTrouve = usagers.FirstOrDefault(u => u.No == numeroDeLUsager);
+            if (usagerTrouve == null)
+            {
+                return;
+            }
 
-          
-            var emprunts = await _empruntRepository.ListAsync();
-            var empruntActif = emprunts.FirstOrDefault(e =>
-                e.Livre != null &&
-                e.Livre.CodeUnique == emprunt.Livre.CodeUnique &&
-                e.DateRetour == null &&
-                e.Usager.No == usagerTrouve.No);
+            // Les cles suffisent : interroger les proprietes de navigation
+            // ferait charger chaque livre et chaque usager un par un.
+            IEnumerable<Emprunt> emprunts = await _empruntRepository.ListAsync();
+            Emprunt? empruntActif = emprunts.FirstOrDefault(e =>
+                e.LivreID == livre.ID &&
+                e.UsagerID == usagerTrouve.ID &&
+                e.DateRetour == null);
 
             if (empruntActif == null)
+            {
                 return;
+            }
 
-                await _empruntRepository.DeleteAsync(empruntActif);
+            await _empruntRepository.DeleteAsync(empruntActif);
 
-            
             livre.Quantite += 1;
             await _livreRepository.EditAsync(livre);
         }
@@ -140,8 +149,7 @@ namespace Bibliotheques.ApplicationCore.Services
             livre.Quantite += 1;
             await _livreRepository.EditAsync(livre);
 
-            if (empruntActif.DateRetourLimite != null &&
-                empruntActif.DateRetour > empruntActif.DateRetourLimite)
+            if (empruntActif.DateRetour > empruntActif.DateRetourLimite)
             {
                 usagerTrouve.Defaillance += 1;
                 await _usagerRepository.EditAsync(usagerTrouve);

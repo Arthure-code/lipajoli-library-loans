@@ -20,10 +20,10 @@ namespace BibliothequeLIPAJOLI.Services
 
         public async Task<List<EmpruntDto>> ObtenirToutEmprunts()
         {
-            return await _httpClient.GetFromJsonAsync<List<EmpruntDto>>(_baseUrl);
+            return await _httpClient.GetFromJsonAsync<List<EmpruntDto>>(_baseUrl) ?? new List<EmpruntDto>();
         }
 
-        public async Task<EmpruntDto> ObtenirUnEmpruntParId(int id)
+        public async Task<EmpruntDto?> ObtenirUnEmpruntParId(int id)
         {
             return await _httpClient.GetFromJsonAsync<EmpruntDto>(_baseUrl + id);
         }
@@ -44,7 +44,7 @@ namespace BibliothequeLIPAJOLI.Services
             await _httpClient.PutAsync(_baseUrl + empruntDto.Id, content);
         }
 
-        public async Task SuprimerUnEmprunt(EmpruntDto empruntDto)
+        public async Task SupprimerUnEmprunt(EmpruntDto empruntDto)
         {
             await _httpClient.DeleteAsync(_baseUrl + empruntDto.Id);
         }

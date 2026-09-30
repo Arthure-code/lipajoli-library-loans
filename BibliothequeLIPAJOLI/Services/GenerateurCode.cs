@@ -21,11 +21,26 @@ namespace BibliothequeLIPAJOLI.Services
 
             string strCategorie = categorie.Substring(0, 3).ToUpper(); // Code catégorie
             int numLivresCategorie = 1;
-            if (livresCategorie.Any())
+            if (livresCategorie.Count > 0)
             {
-                numLivresCategorie = livresCategorie.Max(l => int.Parse(l.CodeUnique.Substring(3, 3))) + 1;
+                numLivresCategorie = livresCategorie
+                    .Select(l => Sequence(l.CodeUnique))
+                    .DefaultIfEmpty(0)
+                    .Max() + 1;
             }
             return strCategorie + numLivresCategorie.ToString("D3");
+        }
+
+        // Les trois chiffres qui suivent le prefixe. Un code absent ou mal
+        // forme ne compte pas, plutot que d'arreter l'attribution.
+        private static int Sequence(string? code)
+        {
+            if (code == null || code.Length < 6)
+            {
+                return 0;
+            }
+
+            return int.TryParse(code.Substring(3, 3), out int numero) ? numero : 0;
         }
     }
 }

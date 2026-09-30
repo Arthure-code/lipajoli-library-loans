@@ -128,6 +128,11 @@ namespace BibliothequeLIPAJOLI.Controllers
         public async Task<IActionResult> Retourner(int id)
         {
             var emprunt = await _empruntsService.ObtenirUnEmpruntParId(id);
+            if (emprunt == null)
+            {
+                return NotFound();
+            }
+
             await _empruntsService.RetournerUnEmprunt(emprunt);
             return RedirectToAction(nameof(Index));
         }
@@ -155,7 +160,7 @@ namespace BibliothequeLIPAJOLI.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-             await _empruntsService.SuprimerUnEmprunt(emprunt);
+             await _empruntsService.SupprimerUnEmprunt(emprunt);
 
             return RedirectToAction(nameof(Index));
         }

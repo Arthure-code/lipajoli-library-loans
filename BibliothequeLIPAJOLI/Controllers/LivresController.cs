@@ -66,7 +66,7 @@ namespace BibliothequeLIPAJOLI.Controllers
             if (!string.IsNullOrEmpty(searchString))
             {
                 livres = livres.Where(l => l.Titre.ToLower().Contains(searchString.ToLower())
-                                       || l.Auteurs.ToLower().Contains(searchString.ToLower())
+                                       || (l.Auteurs ?? string.Empty).ToLower().Contains(searchString.ToLower())
                                        || l.Categorie.ToLower().Contains(searchString.ToLower()));
             }
 
@@ -81,8 +81,8 @@ namespace BibliothequeLIPAJOLI.Controllers
             }
 
             var livre = await _context.Livres
-                .Include(l => l.Emprunts)
-                .ThenInclude(u => u.Usager)
+                .Include(l => l.Emprunts!)
+                .ThenInclude(e => e.Usager)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
 
@@ -226,7 +226,7 @@ namespace BibliothequeLIPAJOLI.Controllers
 
             try
             {
-                if (livre.Emprunts.Any())
+                if (livre.Emprunts?.Count > 0)
                 {
 
                     throw new DbUpdateException();
@@ -261,7 +261,7 @@ namespace BibliothequeLIPAJOLI.Controllers
         /// <returns>Liste des auteurs</returns>
         private List<string> RecupererAuteurs()
         {
-            return _config.GetSection("Livre:Auteurs").Get<string[]>().ToList();
+            return _config.GetSection("Livre:Auteurs").Get<string[]>()?.ToList() ?? new List<string>();
         }
 
         /// <summary>
@@ -270,7 +270,7 @@ namespace BibliothequeLIPAJOLI.Controllers
         /// <returns>Liste des catégories</returns>
         private List<string> RecupererCategories()
         {
-            return _config.GetSection("Livre:Categories").Get<string[]>().ToList();
+            return _config.GetSection("Livre:Categories").Get<string[]>()?.ToList() ?? new List<string>();
         }
 
         /// <summary>
