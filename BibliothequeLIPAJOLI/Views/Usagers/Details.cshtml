@@ -60,7 +60,7 @@
                     <th>Date de retour</th>
 
                 </tr>
-                @foreach (var item in Model.Emprunts)
+                @foreach (var item in Model.Emprunts ?? Enumerable.Empty<BibliothequeLIPAJOLI.Models.Emprunt>())
                 {
                     //var DateRetourLimiteBrut = item.DateEmprunt.AddDays(ViewBag.JourAlloue);
                     //var DateRetourLimite = DateRetourLimiteBrut.ToString("dd MMMM yyyy");
@@ -92,7 +92,7 @@
                             @Html.DisplayFor(modelItem => item.ID)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Livre.Titre)
+                            @Html.DisplayFor(modelItem => item.Livre!.Titre)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.DateEmprunt)

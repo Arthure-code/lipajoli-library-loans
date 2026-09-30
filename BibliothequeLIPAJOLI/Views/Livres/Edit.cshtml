@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Livre - Modification";
-    var listeAuteursDuLive = Model.Auteurs.Split(", ").ToList(); //la liste des auteurs, pour que les checkbox soient deja cochés
+    var listeAuteursDuLivre = (Model.Auteurs ?? string.Empty).Split(", ").ToList(); //la liste des auteurs, pour que les checkbox soient deja cochés
 }
 
 <h1>Modification d'un livre</h1>
@@ -68,7 +68,7 @@
                                 <input type="checkbox"
                                        name="auteursSelectiones"
                                        value="@auteur"
-                                       @(Html.Raw(listeAuteursDuLive.Contains(auteur) ? "checked=\"checked\"" : "")) />
+                                       @(Html.Raw(listeAuteursDuLivre.Contains(auteur) ? "checked=\"checked\"" : "")) />
                                 @auteur
                             @:</td>
                         }

@@ -74,7 +74,7 @@
                     <th>Date de retour</th>
                 </tr>
 
-                @foreach (var item in Model.Emprunts)
+                @foreach (var item in Model.Emprunts ?? Enumerable.Empty<BibliothequeLIPAJOLI.Models.Emprunt>())
                 {
                     string couleur = "white";
                     if (item.DateRetour == null)
@@ -84,7 +84,7 @@
 
                     <tr style="background-color:@couleur">
                         <td>
-                            @Html.DisplayFor(modelItem => item.Usager.Prenom) @Html.DisplayFor(modelItem => item.Usager.Nom)
+                            @Html.DisplayFor(modelItem => item.Usager!.Prenom) @Html.DisplayFor(modelItem => item.Usager!.Nom)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.DateEmprunt)
