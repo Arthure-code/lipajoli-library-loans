@@ -62,10 +62,6 @@
                 </tr>
                 @foreach (var item in Model.Emprunts ?? Enumerable.Empty<BibliothequeLIPAJOLI.Models.Emprunt>())
                 {
-                    //var DateRetourLimiteBrut = item.DateEmprunt.AddDays(ViewBag.JourAlloue);
-                    //var DateRetourLimite = DateRetourLimiteBrut.ToString("dd MMMM yyyy");
-                    //var DateEmprunt = item.DateEmprunt.ToString("dd MMMM yyyy");
-
                     string couleur = "white";
                     if (item.DateRetour == null)
                     {

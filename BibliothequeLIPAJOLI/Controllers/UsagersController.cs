@@ -42,8 +42,6 @@ namespace BibliothequeLIPAJOLI.Controllers
 
         public async Task<IActionResult> Details(int? id)
         {
-            //ViewBag.JourAlloue = RecupererJourAlloue();
-
             if (id == null)
             {
                 return View("Error");
@@ -61,13 +59,6 @@ namespace BibliothequeLIPAJOLI.Controllers
             }
 
             return View(usager);
-        }
-
-        private dynamic RecupererJourAlloue()
-        {
-            var jours = _config.GetValue<int>("Emprunt:JourAlloue");
-            return jours;
-
         }
 
         public IActionResult Create()
