@@ -22,7 +22,7 @@ namespace BibliothequeLIPAJOLI.Data
             var usagers = new Usager[]
             {
             new Usager{ ID = 1,Courriel="abc@def.com", Prenom="Bob", Nom="Bricoleur", Statut=Statut.Enseignant, No=123456},
-            new Usager{ ID = 2,Courriel="123@456.ca", Prenom="Dora", Nom="Exploratrice", Statut=Statut.Étudiant, No=098765}
+            new Usager{ ID = 2,Courriel="123@456.ca", Prenom="Dora", Nom="Exploratrice", Statut=Statut.Étudiant, No=098765, Defaillance=1}
             };
 
             foreach (Usager u in usagers)
@@ -44,14 +44,18 @@ namespace BibliothequeLIPAJOLI.Data
             }
             context.SaveChanges();
 
+            var aujourdhui = DateTime.Today;
+
             var emprunts = new Emprunt[]
             {
-            new Emprunt{LivreID=1, UsagerID=1, DateEmprunt=DateTime.Now, DateRetourLimite=DateTime.Now.AddDays(10)},
-            new Emprunt{LivreID=1, UsagerID=2, DateEmprunt=DateTime.Now, DateRetourLimite=DateTime.Now.AddDays(10), DateRetour=DateTime.Now.AddDays(20)},
-            new Emprunt{LivreID=2, UsagerID=1, DateEmprunt=DateTime.Now.AddDays(-5), DateRetour=DateTime.Now.AddDays(10)},
-            new Emprunt{LivreID=3, UsagerID=2, DateEmprunt=DateTime.Now.AddDays(-3), DateRetour=DateTime.Now.AddDays(10)},
-            new Emprunt{LivreID=4, UsagerID=2, DateEmprunt=DateTime.Now.AddDays(-10), DateRetour=DateTime.Now.AddDays(10)}
-
+            // En cours : emprunte il y a trois jours, a rendre dans sept.
+            new Emprunt{LivreID=1, UsagerID=1, DateEmprunt=aujourdhui.AddDays(-3), DateRetourLimite=aujourdhui.AddDays(7)},
+            // Rendu a temps, trois jours avant la date limite.
+            new Emprunt{LivreID=2, UsagerID=1, DateEmprunt=aujourdhui.AddDays(-20), DateRetourLimite=aujourdhui.AddDays(-10), DateRetour=aujourdhui.AddDays(-13)},
+            // Rendu cinq jours en retard : le dossier de l'usager en garde une defaillance.
+            new Emprunt{LivreID=3, UsagerID=2, DateEmprunt=aujourdhui.AddDays(-30), DateRetourLimite=aujourdhui.AddDays(-20), DateRetour=aujourdhui.AddDays(-15)},
+            // En cours pour le deuxieme usager.
+            new Emprunt{LivreID=4, UsagerID=2, DateEmprunt=aujourdhui.AddDays(-1), DateRetourLimite=aujourdhui.AddDays(9)}
             };
             foreach (Emprunt e in emprunts)
             {
