@@ -1,0 +1,51 @@
+﻿@model BibliothequeLIPAJOLI.DTOs.EmpruntDto
+
+@{
+    ViewData["Title"] = "Détails de l'emprunt";
+}
+
+<h2 class="mb-4">Détails de l'emprunt</h2>
+<hr />
+
+<dl class="row">
+    <dt class="col-sm-3" hidden>ID de l'emprunt</dt>
+    <dd class="col-sm-9" hidden>@Model.Id</dd>
+
+    <dt class="col-sm-3">Date d'emprunt</dt>
+    <dd class="col-sm-9">@Model.DateEmprunt.ToString("dd MMMM yyyy")</dd>
+
+    <dt class="col-sm-3">Date limite de retour</dt>
+    <dd class="col-sm-9">@Model.DateRetourLimite.ToString("dd MMMM yyyy")</dd>
+
+    <dt class="col-sm-3">Date de retour</dt>
+    <dd class="col-sm-9">
+        @(Model.DateRetour != null ? Model.DateRetour.Value.ToString("dd MMMM yyyy") : "Non retourné")
+    </dd>
+
+    <dt class="col-sm-3">Usager</dt>
+    <dd class="col-sm-9">
+        <strong>@Model.Usager?.Prenom @Model.Usager?.Nom</strong><br />
+        No : @Model.Usager?.No<br />
+        Statut : @Model.Usager?.Statut<br />
+        Défaillance : @Model.Usager?.Defaillance<br />
+        Courriel : @Model.Usager?.Courriel
+    </dd>
+
+    <dt class="col-sm-3">Livre</dt>
+    <dd class="col-sm-9">
+        <strong>@Model.Livre?.Titre</strong><br />
+        ISBN-10 : @Model.Livre?.Isbn10<br />
+        ISBN-13 : @Model.Livre?.Isbn13<br />
+        Code unique : @Model.Livre?.CodeUnique<br />
+        Catégorie : @Model.Livre?.Categorie<br />
+        Auteurs : @Model.Livre?.Auteurs<br />
+        Quantité : @Model.Livre?.Quantite<br />
+        Prix : @Model.Livre?.Prix.ToString("C")
+    </dd>
+</dl>
+
+<div class="mt-4">
+    <a asp-action="Index" class="btn btn-secondary">Retour à la liste</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Retourner</a>
+    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Supprimer</a>
+</div>

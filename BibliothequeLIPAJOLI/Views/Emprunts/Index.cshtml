@@ -1,0 +1,89 @@
+﻿@model IEnumerable<BibliothequeLIPAJOLI.DTOs.EmpruntDto>
+
+@{
+    ViewData["Title"] = "Liste des emprunts";
+}
+
+<h2 class="mb-4">Liste des emprunts</h2>
+
+<div class="mb-3">
+    <a asp-action="Create" class="btn btn-success"> + Faire un emprunt</a>
+</div>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info">@TempData["Message"]</div>
+}
+
+<div class="mb-3 row">
+    <div class="col-md-9 d-flex flex-wrap gap-2">
+        <a asp-action="Index" asp-route-statut="tous" class="btn btn-outline-secondary @(ViewBag.Statut == "tous" ? "active" : "")">Historique des emprunts</a>
+        <a asp-action="Index" asp-route-statut="enCours" class="btn btn-outline-warning @(ViewBag.Statut == "enCours" ? "active" : "")">Emprunts en cours</a>
+        <a asp-action="Index" asp-route-statut="retournes" class="btn btn-outline-success @(ViewBag.Statut == "retournes" ? "active" : "")">Emprunt retournés</a>
+        <a asp-action="Index" asp-route-statut="enRetard" class="btn btn-outline-danger @(ViewBag.Statut == "enRetard" ? "active" : "")">Emprunt en retard</a>
+    </div>
+    <div class="col-md-3 text-md-end mt-2 mt-md-0">
+        <a asp-action="Index" class="btn btn-secondary">Menu principal</a>
+    </div>
+</div>
+<p class="text-muted">Total : @Model.Count() emprunt(s) affiché(s)</p>
+
+<table class="table table-bordered table-hover">
+    <thead class="table-light">
+        <tr>
+            <th>Usager</th>
+            <th>Livre</th>
+            <th>Date d'emprunt</th>
+            <th>Date limite</th>
+            <th>Date de retour</th>
+            <th>Statut</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var emprunt in Model)
+        {
+            <tr>
+                <td>@emprunt.Usager?.Prenom @emprunt.Usager?.Nom</td>
+                <td>@emprunt.Livre?.Titre</td>
+                <td>@emprunt.DateEmprunt.ToShortDateString()</td>
+                <td>@emprunt.DateRetourLimite.ToShortDateString()</td>
+                <td>@(emprunt.DateRetour?.ToShortDateString() ?? "En cours")</td>
+                <td>
+                    @if (emprunt.DateRetour == null)
+                    {
+                        <span class="badge bg-warning text-dark">En cours</span>
+                    }
+                    else if (emprunt.DateRetour > emprunt.DateRetourLimite)
+                    {
+                        <span class="badge bg-danger">Retard</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">Retourné</span>
+                    }
+                </td>
+                <td>
+                    <div class="btn-group" role="group">
+                        <a asp-action="Details" asp-route-id="@emprunt.Id" class="btn btn-sm btn-info">Détails</a>
+
+                        @if (emprunt.DateRetour == null)
+                        {
+                            <a asp-action="Edit" asp-route-id="@emprunt.Id" class="btn btn-sm btn-primary">Retourner</a>
+
+                            <form asp-action="Delete" method="get" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@emprunt.Id" />
+                                <button type="submit" class="btn btn-sm btn-danger">Supprimer</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <span class="text-muted ms-2">Aucune action</span>
+                        }
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

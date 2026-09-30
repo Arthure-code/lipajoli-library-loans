@@ -1,0 +1,78 @@
+﻿@model IEnumerable<BibliothequeLIPAJOLI.Models.Usager>
+
+@{
+    ViewData["Title"] = "Usagers - Liste complète";
+
+}
+
+<h1>Liste des usagers</h1>
+
+<p>
+    <a asp-action="Create">Ajouter un nouvel usager</a>
+</p>
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Recherche d'un usager: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Rechercher" class="btn btn-default" /> | 
+            <a asp-action="Index">Retour à la liste d'usagers</a>
+        </p>
+    </div>
+</form>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.No)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Prenom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Statut)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Defaillance)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Courriel)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.No)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Prenom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Statut)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Defaillance)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Courriel)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ID">Modifier</a> |
+                <a asp-action="Details" asp-route-id="@item.ID">Détails</a> |
+                <a asp-action="Delete" asp-route-id="@item.ID">Suprimer</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

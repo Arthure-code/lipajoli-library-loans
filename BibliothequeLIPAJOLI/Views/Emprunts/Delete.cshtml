@@ -1,0 +1,46 @@
+﻿@model BibliothequeLIPAJOLI.DTOs.EmpruntDto
+
+@{
+    ViewData["Title"] = "Supprimer un emprunt";
+}
+
+<h2 class="mb-4">Supprimer un emprunt</h2>
+
+<h4>Es-tu sûr de vouloir supprimer cet emprunt ?</h4>
+<hr />
+
+<dl class="row">
+    <dt class="col-sm-3">Usager</dt>
+    <dd class="col-sm-9">@Model.Usager?.Prenom @Model.Usager?.Nom</dd>
+
+    <dt class="col-sm-3">Livre</dt>
+    <dd class="col-sm-9">@Model.Livre?.Titre (@Model.Livre?.Categorie)</dd>
+
+    <dt class="col-sm-3">Date d'emprunt</dt>
+    <dd class="col-sm-9">@Model.DateEmprunt.ToShortDateString()</dd>
+
+    <dt class="col-sm-3">Date limite</dt>
+    <dd class="col-sm-9">@Model.DateRetourLimite.ToShortDateString()</dd>
+
+    <dt class="col-sm-3">Date de retour</dt>
+    <dd class="col-sm-9 bg-success text-white" title="Statut de retour">
+        @(Model.DateRetour != null ? Model.DateRetour.Value.ToShortDateString() : "Non retourné")
+    </dd>
+</dl>
+
+@if (Model.DateRetour == null)
+{
+    <form asp-action="Delete" method="post" class="d-inline">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Confirmer la suppression</button>
+        <a asp-action="Index" class="btn btn-secondary ms-2">Annuler</a>
+    </form>
+}
+else
+{
+    <div class="alert alert-warning mt-3">
+        Cet emprunt a déjà été retourné. Il ne peut pas être supprimé.
+    </div>
+    <a asp-action="Index" class="btn btn-secondary">Retour à la liste</a>
+}

@@ -1,0 +1,121 @@
+﻿@model BibliothequeLIPAJOLI.Models.Usager
+
+@{
+    ViewData["Title"] = "Usager - Détails";
+}
+
+<h1>Informations sur l'usager</h1>
+
+<div>
+    <h4>Usager</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.No)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.No)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Nom)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Nom)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Prenom)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Prenom)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Statut)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Statut)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Defaillance)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Defaillance)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Courriel)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Courriel)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Emprunts)
+        </dt>
+        <dd class="col-sm-10">
+            <table class="table">
+                <tr>
+                    <th>ID de l'emprunt</th>
+                    <th>Titre du livre</th>
+                    <th>Date de l'emprunt</th>
+                    <th>Date de retour limite</th>
+                    <th>Date de retour</th>
+
+                </tr>
+                @foreach (var item in Model.Emprunts)
+                {
+                    //var DateRetourLimiteBrut = item.DateEmprunt.AddDays(ViewBag.JourAlloue);
+                    //var DateRetourLimite = DateRetourLimiteBrut.ToString("dd MMMM yyyy");
+                    //var DateEmprunt = item.DateEmprunt.ToString("dd MMMM yyyy");
+
+                    string couleur = "white";
+                    if (item.DateRetour == null)
+                    {
+                        couleur = "red";
+                    }
+
+                    // Si il y a pas de date de retour et que la date limite est dépassée, ou 
+                    // Si il y a une date de retour mais qu'elle est plus grande que la date de retour limitte
+                    //if ((!item.DateRetour.HasValue && DateRetourLimiteBrut < DateTime.Today) || (item.DateRetour.HasValue && item.DateRetour > DateRetourLimiteBrut))// si retour sans valeur
+                    //{
+                    //    couleur = "yellow";
+                    //}
+
+                    // Si on a un valeur pour la date de retour alors on l'affiche adéquatement sinon ( Non retourné)
+                    string DateRetour = "Non retourné";
+                    if (item.DateRetour.HasValue)
+                    {
+                        var DateRetourT = (DateTime)item.DateRetour;
+                        DateRetour = DateRetourT.ToString("dd MMMM yyyy");
+                    }
+
+                    <tr style="background-color:@couleur">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Livre.Titre)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateEmprunt)
+
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateRetourLimite)
+                        </td>
+                        <td>
+                            @{ if (item.DateRetour == null)
+                                {
+                                    @DateRetour;
+                                }
+                                    @Html.DisplayFor(modelItem => item.DateRetour);}
+                        </td>
+                    </tr>
+                }
+            </table>
+        </dd>
+
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ID">Modifier</a> |
+    <a asp-action="Index">Retour à la liste d'usagers</a>
+</div>
