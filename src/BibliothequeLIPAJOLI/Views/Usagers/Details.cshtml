@@ -91,11 +91,7 @@
                             @Html.DisplayFor(modelItem => item.DateRetourLimite)
                         </td>
                         <td>
-                            @{ if (item.DateRetour == null)
-                                {
-                                    @DateRetour;
-                                }
-                                    @Html.DisplayFor(modelItem => item.DateRetour);}
+                            @DateRetour
                         </td>
                     </tr>
                 }
