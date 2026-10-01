@@ -241,6 +241,83 @@ namespace Bibliotheques.Infrastructure.TestsIntegration
             Assert.Empty(await _emprunts.ListAsync());
         }
 
+        [Fact]
+        public async Task SupprimerUnEmprunt_NeFaitRienQuandLeCodeDuLivreEstVide()
+        {
+            //Etant donne un emprunt dont le livre n a pas de code
+            Livre livre = await UnLivre();
+            Usager usager = await UnUsager();
+            Emprunt? emprunt = await _service.InscrireUnNouvelEmprunt(usager, livre);
+            emprunt!.Usager = usager;
+            emprunt.Livre = new Livre { CodeUnique = string.Empty };
+            _base.Oublier();
+
+            //Lorsque
+            await _service.SupprimerUnEmprunt(emprunt);
+
+            //Alors rien n est supprime
+            Assert.Single(await _emprunts.ListAsync());
+        }
+
+        [Fact]
+        public async Task SupprimerUnEmprunt_NeFaitRienQuandLeLivreNEstPasAuCatalogue()
+        {
+            //Etant donne un emprunt dont le livre porte un code inconnu
+            Livre livre = await UnLivre();
+            Usager usager = await UnUsager();
+            Emprunt? emprunt = await _service.InscrireUnNouvelEmprunt(usager, livre);
+            emprunt!.Usager = usager;
+            emprunt.Livre = new Livre { CodeUnique = "XXX999" };
+            _base.Oublier();
+
+            //Lorsque
+            await _service.SupprimerUnEmprunt(emprunt);
+
+            //Alors
+            Assert.Single(await _emprunts.ListAsync());
+        }
+
+        [Fact]
+        public async Task SupprimerUnEmprunt_NeFaitRienQuandLUsagerEstInconnu()
+        {
+            //Etant donne un emprunt dont l usager porte un numero inconnu
+            Livre livre = await UnLivre();
+            Usager usager = await UnUsager();
+            Emprunt? emprunt = await _service.InscrireUnNouvelEmprunt(usager, livre);
+            emprunt!.Livre = livre;
+            emprunt.Usager = new Usager { No = 999999, Nom = "Inconnu", Prenom = "Parfait", Statut = Statut.Étudiant };
+            _base.Oublier();
+
+            //Lorsque
+            await _service.SupprimerUnEmprunt(emprunt);
+
+            //Alors
+            Assert.Single(await _emprunts.ListAsync());
+        }
+
+        [Fact]
+        public async Task RetournerUnEmprunt_RendNullQuandLeLivreEstInconnu()
+        {
+            //Etant donne un livre qui n est pas au catalogue
+            Usager usager = await UnUsager();
+            _base.Oublier();
+
+            //Alors
+            Assert.Null(await _service.RetournerUnEmprunt(usager, new Livre { CodeUnique = "XXX999" }));
+        }
+
+        [Fact]
+        public async Task RetournerUnEmprunt_RendNullSansLivreNiCode()
+        {
+            //Etant donne un retour sans livre, puis un livre sans code
+            Usager usager = await UnUsager();
+            _base.Oublier();
+
+            //Alors les deux sortent proprement
+            Assert.Null(await _service.RetournerUnEmprunt(usager, null!));
+            Assert.Null(await _service.RetournerUnEmprunt(usager, new Livre { CodeUnique = string.Empty }));
+        }
+
         public void Dispose()
         {
             _base.Dispose();

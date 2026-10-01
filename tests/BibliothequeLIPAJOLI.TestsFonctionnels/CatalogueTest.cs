@@ -197,6 +197,64 @@ namespace BibliothequeLIPAJOLI.TestsFonctionnels
             Assert.Contains("ROM001", await navigateur.GetStringAsync("/Livres"), StringComparison.Ordinal);
         }
 
+        [Fact]
+        public async Task Create_UnTitreManquantRevientAvecSonMessage()
+        {
+            //Etant donne un formulaire sans titre
+            HttpClient navigateur = Navigateur();
+            string jeton = await Jeton(navigateur, "/Livres/Create");
+            Dictionary<string, string> champs = UnLivre(jeton, "18,50", "2222222222", "9782222222222");
+            champs["Titre"] = string.Empty;
+
+            //Lorsque
+            HttpResponseMessage reponse = await navigateur.PostAsync("/Livres/Create",
+                new FormUrlEncodedContent(champs));
+
+            //Alors la page revient, et rien n est catalogue
+            Assert.Equal(HttpStatusCode.OK, reponse.StatusCode);
+            Assert.DoesNotContain("Notre-Dame de Paris", await navigateur.GetStringAsync("/Livres"),
+                StringComparison.Ordinal);
+        }
+
+        [Fact]
+        public async Task Create_UnLivreSansAuteurEstRefuse()
+        {
+            //Etant donne un formulaire ou aucune case d auteur n est cochee
+            HttpClient navigateur = Navigateur();
+            string jeton = await Jeton(navigateur, "/Livres/Create");
+            Dictionary<string, string> champs = UnLivre(jeton, "18,50", "2222222222", "9782222222222");
+            champs.Remove("auteursSelectiones");
+
+            //Lorsque
+            HttpResponseMessage reponse = await navigateur.PostAsync("/Livres/Create",
+                new FormUrlEncodedContent(champs));
+
+            //Alors la page le dit
+            Assert.Equal(HttpStatusCode.OK, reponse.StatusCode);
+            Assert.Contains("au moins un auteur", await reponse.Content.ReadAsStringAsync(),
+                StringComparison.Ordinal);
+        }
+
+        [Fact]
+        public async Task Edit_UnTitreManquantRevientSansRienEcrire()
+        {
+            //Etant donne une modification sans titre
+            HttpClient navigateur = Navigateur();
+            string jeton = await Jeton(navigateur, "/Livres/Edit/1");
+            Dictionary<string, string> champs = UnLivre(jeton, "11,50", "0393966429", "9780393966428");
+            champs["Titre"] = string.Empty;
+            champs["Categorie"] = "Fiction";
+
+            //Lorsque
+            HttpResponseMessage reponse = await navigateur.PostAsync("/Livres/Edit/1",
+                new FormUrlEncodedContent(champs));
+
+            //Alors le livre garde son titre
+            Assert.Equal(HttpStatusCode.OK, reponse.StatusCode);
+            Assert.Contains("Anna Karenina", await navigateur.GetStringAsync("/Livres"),
+                StringComparison.Ordinal);
+        }
+
         public void Dispose()
         {
             _application.Dispose();
