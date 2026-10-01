@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Livre - Modification";
-    var listeAuteursDuLivre = (Model.Auteurs ?? string.Empty).Split(", ").ToList(); //la liste des auteurs, pour que les checkbox soient deja cochés
 }
 
 <h1>Modification d'un livre</h1>
@@ -11,63 +10,9 @@
 
 <form asp-action="Edit">
 
-    <div class="row">
-        <div class="col-md-4">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Isbn10" class="control-label"></label>
-                <input asp-for="Isbn10" class="form-control" />
-                <span asp-validation-for="Isbn10" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Isbn13" class="control-label"></label>
-                <input asp-for="Isbn13" class="form-control" />
-                <span asp-validation-for="Isbn13" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Titre" class="control-label"></label>
-                <input asp-for="Titre" class="form-control" />
-                <span asp-validation-for="Titre" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Quantite" class="control-label"></label>
-                <input asp-for="Quantite" class="form-control" />
-                <span asp-validation-for="Quantite" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Prix" class="control-label"></label>
-                <input asp-for="Prix" class="form-control"/>
-                <span asp-validation-for="Prix" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Categorie" class="control-label"></label>
-                @Html.DropDownListFor(model => model.Categorie, new SelectList(ViewBag.Categories), "Choisir une nouvelle catégorie", new { @class = "form-control" })
-                <span asp-validation-for="Categorie" class="text-danger"></span>
-            </div>
-        </div>
-    </div>
+    <partial name="_Champs" model="Model" />
 
-    <div class="form-group">
-        <label asp-for="Auteurs"></label>
-        <div class="col-md-offset-2 col-md-10">
-            <div class="row">
-                @{
-                    int numeroDeLAuteur = 0;
-                    List<string> auteurs = ViewBag.Auteurs;
-                }
-                @foreach (var auteur in auteurs)
-                {
-                    string identifiant = "auteur-" + numeroDeLAuteur++;
-                    <div class="col-4">
-                        <input type="checkbox" id="@identifiant" name="auteursSelectiones" value="@auteur"
-                               @(Html.Raw(listeAuteursDuLivre.Contains(auteur) ? "checked=\"checked\"" : "")) />
-                        <label for="@identifiant">@auteur</label>
-                    </div>
-                }
-            </div>
-            </div>
-
-        </div>
+    <partial name="_Auteurs" model="Model" />
         <div class="form-group">
             <input type="submit" value="Sauvegarder" class="btn btn-primary" />
         </div>

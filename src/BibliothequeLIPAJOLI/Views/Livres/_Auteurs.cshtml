@@ -1,0 +1,26 @@
+@model BibliothequeLIPAJOLI.Models.Livre
+
+@{
+    // Les auteurs deja choisis restent coches quand la page revient.
+    List<string> dejaChoisis = (Model?.Auteurs ?? string.Empty).Split(", ").ToList();
+    List<string> auteursConnus = ViewBag.Auteurs;
+    int numeroDeLAuteur = 0;
+}
+
+<div class="form-group">
+    <label asp-for="Auteurs"></label>
+    <div class="col-md-offset-2 col-md-10">
+        <div class="row">
+            @foreach (var auteur in auteursConnus)
+            {
+                string identifiant = "auteur-" + numeroDeLAuteur++;
+                <div class="col-4">
+                    <input type="checkbox" id="@identifiant" name="auteursSelectiones" value="@auteur"
+                           @(Html.Raw(dejaChoisis.Contains(auteur) ? "checked=\"checked\"" : "")) />
+                    <label for="@identifiant">@auteur</label>
+                </div>
+            }
+        </div>
+        <span asp-validation-for="Auteurs" class="text-danger"></span>
+    </div>
+</div>

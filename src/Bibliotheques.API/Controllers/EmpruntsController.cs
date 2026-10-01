@@ -36,37 +36,7 @@ namespace Bibliotheques.API.Controllers
         public async Task<IEnumerable<EmpruntDto>> Get()
         {
             var emprunts = await _empruntsService.ObtenirToutEmprunts();
-            return emprunts.Select(e => new EmpruntDto
-            {
-                Id = e.ID,
-                UsagerID = e.UsagerID,
-                LivreID = e.LivreID,
-                DateEmprunt = e.DateEmprunt,
-                DateRetourLimite = e.DateRetourLimite,
-                DateRetour = e.DateRetour,
-                Usager = e.Usager != null ? new UsagerDto
-                {
-                    Id = e.Usager.ID,
-                    No = e.Usager.No,
-                    Nom = e.Usager.Nom,
-                    Prenom = e.Usager.Prenom,
-                    Statut = e.Usager.Statut, // Cast l'enum en int
-                    Defaillance = e.Usager.Defaillance,
-                    Courriel = e.Usager.Courriel
-                } : null,
-                Livre = e.Livre != null ? new LivreDto
-                {
-                    Id = e.Livre.ID,
-                    CodeUnique = e.Livre.CodeUnique,
-                    Isbn10 = e.Livre.Isbn10,
-                    Isbn13 = e.Livre.Isbn13,
-                    Titre = e.Livre.Titre,
-                    Quantite = e.Livre.Quantite,
-                    Prix = e.Livre.Prix,
-                    Auteurs = e.Livre.Auteurs,
-                    Categorie = e.Livre.Categorie
-                } : null
-            });
+            return emprunts.Select(VersDto);
         }
 
 
@@ -92,39 +62,7 @@ namespace Bibliotheques.API.Controllers
                 return NotFound();
             }
 
-            var empruntDto = new EmpruntDto
-            {
-                Id = emprunt.ID,
-                UsagerID = emprunt.UsagerID,
-                LivreID = emprunt.LivreID,
-                DateEmprunt = emprunt.DateEmprunt,
-                DateRetourLimite = emprunt.DateRetourLimite,
-                DateRetour = emprunt.DateRetour,
-                Usager = emprunt.Usager != null ? new UsagerDto
-                {
-                   Id = emprunt.Usager.ID,
-                    No = emprunt.Usager.No,
-                    Nom = emprunt.Usager.Nom,
-                    Prenom = emprunt.Usager.Prenom,
-                    Statut = emprunt.Usager.Statut,
-                    Defaillance = emprunt.Usager.Defaillance,
-                    Courriel = emprunt.Usager.Courriel
-                } : null,
-                Livre = emprunt.Livre != null ? new LivreDto
-                {
-                    Id = emprunt.Livre.ID,
-                    CodeUnique = emprunt.Livre.CodeUnique,
-                    Isbn10 = emprunt.Livre.Isbn10,
-                    Isbn13 = emprunt.Livre.Isbn13,
-                    Titre = emprunt.Livre.Titre,
-                    Quantite = emprunt.Livre.Quantite,
-                    Prix = emprunt.Livre.Prix,
-                    Auteurs = emprunt.Livre.Auteurs,
-                    Categorie = emprunt.Livre.Categorie
-                } : null
-            };
-
-            return Ok(empruntDto);
+            return Ok(VersDto(emprunt));
         }
 
 
@@ -154,46 +92,18 @@ namespace Bibliotheques.API.Controllers
                 return BadRequest("Les données de l'usager ou du livre sont manquantes.");
 
             // Mapping manuel des DTO vers les entites
-            var usager = new Usager
-            {
-                ID = empruntDto.Usager.Id,
-                No = empruntDto.Usager.No,
-                Nom = empruntDto.Usager.Nom,
-                Prenom = empruntDto.Usager.Prenom,
-                Statut = empruntDto.Usager.Statut,
-                Defaillance = empruntDto.Usager.Defaillance,
-                Courriel = empruntDto.Usager.Courriel
-            };
+            Usager usager = VersEntite(empruntDto.Usager);
 
-            var livre = new Livre
-            {
-                ID = empruntDto.Livre.Id,
-                CodeUnique = empruntDto.Livre.CodeUnique,
-                Isbn10 = empruntDto.Livre.Isbn10,
-                Isbn13 = empruntDto.Livre.Isbn13,
-                Titre = empruntDto.Livre.Titre,
-                Quantite = empruntDto.Livre.Quantite,
-                Prix = empruntDto.Livre.Prix,
-                Auteurs = empruntDto.Livre.Auteurs,
-                Categorie = empruntDto.Livre.Categorie
-            };
+            Livre livre = VersEntite(empruntDto.Livre);
 
             var nouvelEmprunt = await _empruntsService.InscrireUnNouvelEmprunt(usager, livre);
 
             if (nouvelEmprunt == null)
                 return BadRequest("Impossible de créer l'emprunt. Vérifiez la disponibilité du livre ou les informations de l'usager.");
 
-            var empruntResultDto = new EmpruntDto
-            {
-                Id = nouvelEmprunt.ID,
-                UsagerID = nouvelEmprunt.UsagerID,
-                LivreID = nouvelEmprunt.LivreID,
-                DateEmprunt = nouvelEmprunt.DateEmprunt,
-                DateRetourLimite = nouvelEmprunt.DateRetourLimite,
-                DateRetour = nouvelEmprunt.DateRetour,
-                Usager = empruntDto.Usager,
-                Livre = empruntDto.Livre
-            };
+            EmpruntDto empruntResultDto = VersDto(nouvelEmprunt);
+            empruntResultDto.Usager = empruntDto.Usager;
+            empruntResultDto.Livre = empruntDto.Livre;
 
             return CreatedAtAction(nameof(Get), new { id = nouvelEmprunt.ID }, empruntResultDto);
         }
@@ -229,29 +139,9 @@ namespace Bibliotheques.API.Controllers
             if (id != empruntDto.Id)
                 return BadRequest("L'ID dans l'URL ne correspond pas à l'emprunt.");
 
-            var usager = new Usager
-            {
-                ID = empruntDto.Usager.Id,
-                No = empruntDto.Usager.No,
-                Nom = empruntDto.Usager.Nom,
-                Prenom = empruntDto.Usager.Prenom,
-                Statut = empruntDto.Usager.Statut,
-                Defaillance = empruntDto.Usager.Defaillance,
-                Courriel = empruntDto.Usager.Courriel
-            };
+            Usager usager = VersEntite(empruntDto.Usager);
 
-            var livre = new Livre
-            {
-                ID = empruntDto.Livre.Id,
-                CodeUnique = empruntDto.Livre.CodeUnique,
-                Isbn10 = empruntDto.Livre.Isbn10,
-                Isbn13 = empruntDto.Livre.Isbn13,
-                Titre = empruntDto.Livre.Titre,
-                Quantite = empruntDto.Livre.Quantite,
-                Prix = empruntDto.Livre.Prix,
-                Auteurs = empruntDto.Livre.Auteurs,
-                Categorie = empruntDto.Livre.Categorie
-            };
+            Livre livre = VersEntite(empruntDto.Livre);
 
             var empruntRetourné = await _empruntsService.RetournerUnEmprunt(usager, livre);
 
@@ -293,6 +183,84 @@ namespace Bibliotheques.API.Controllers
             await _empruntsService.SupprimerUnEmprunt(emprunt);
 
             return NoContent(); 
+        }
+
+        // Un emprunt tel que les pages le lisent : ses donnees, et celles de
+        // l'usager et du livre, sans les proprietes de navigation qui
+        // ramenent la serialisation sur ses pas.
+        private static EmpruntDto VersDto(Emprunt emprunt)
+        {
+            return new EmpruntDto
+            {
+                Id = emprunt.ID,
+                UsagerID = emprunt.UsagerID,
+                LivreID = emprunt.LivreID,
+                DateEmprunt = emprunt.DateEmprunt,
+                DateRetourLimite = emprunt.DateRetourLimite,
+                DateRetour = emprunt.DateRetour,
+                Usager = emprunt.Usager == null ? null : VersDto(emprunt.Usager),
+                Livre = emprunt.Livre == null ? null : VersDto(emprunt.Livre)
+            };
+        }
+
+        private static UsagerDto VersDto(Usager usager)
+        {
+            return new UsagerDto
+            {
+                Id = usager.ID,
+                No = usager.No,
+                Nom = usager.Nom,
+                Prenom = usager.Prenom,
+                Statut = usager.Statut,
+                Defaillance = usager.Defaillance,
+                Courriel = usager.Courriel
+            };
+        }
+
+        private static LivreDto VersDto(Livre livre)
+        {
+            return new LivreDto
+            {
+                Id = livre.ID,
+                CodeUnique = livre.CodeUnique,
+                Isbn10 = livre.Isbn10,
+                Isbn13 = livre.Isbn13,
+                Titre = livre.Titre,
+                Quantite = livre.Quantite,
+                Prix = livre.Prix,
+                Auteurs = livre.Auteurs,
+                Categorie = livre.Categorie
+            };
+        }
+
+        private static Usager VersEntite(UsagerDto usager)
+        {
+            return new Usager
+            {
+                ID = usager.Id,
+                No = usager.No,
+                Nom = usager.Nom,
+                Prenom = usager.Prenom,
+                Statut = usager.Statut,
+                Defaillance = usager.Defaillance,
+                Courriel = usager.Courriel
+            };
+        }
+
+        private static Livre VersEntite(LivreDto livre)
+        {
+            return new Livre
+            {
+                ID = livre.Id,
+                CodeUnique = livre.CodeUnique,
+                Isbn10 = livre.Isbn10,
+                Isbn13 = livre.Isbn13,
+                Titre = livre.Titre,
+                Quantite = livre.Quantite,
+                Prix = livre.Prix,
+                Auteurs = livre.Auteurs,
+                Categorie = livre.Categorie
+            };
         }
     }
 }
