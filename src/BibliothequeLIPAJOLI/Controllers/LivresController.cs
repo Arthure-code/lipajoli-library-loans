@@ -165,7 +165,8 @@ namespace BibliothequeLIPAJOLI.Controllers
 
             VerifierISBN10et13(livre);
 
-            var categorieLivreAvantModif = _context.Livres.AsNoTracking().Single(l => l.ID == livre.ID).Categorie;
+            var categorieLivreAvantModif = (await _context.Livres.AsNoTracking()
+                .SingleAsync(l => l.ID == livre.ID)).Categorie;
 
             if (categorieLivreAvantModif != livre.Categorie)
             {

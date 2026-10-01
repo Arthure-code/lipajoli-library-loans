@@ -58,7 +58,6 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
 
     var context = services.GetRequiredService<BibliothequeContext>();
-   // context.Database.EnsureCreated();
     DbInitializer.Initialize(context);
 }
 
@@ -73,4 +72,4 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.Run();
+await app.RunAsync();

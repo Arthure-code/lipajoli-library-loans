@@ -77,8 +77,8 @@ namespace BibliothequeLIPAJOLI.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    usager.No = _context.Usagers
-                        .Max(u => u.No) + 1;
+                    usager.No = await _context.Usagers
+                        .MaxAsync(u => u.No) + 1;
 
                     _context.Add(usager);
                     await _context.SaveChangesAsync();

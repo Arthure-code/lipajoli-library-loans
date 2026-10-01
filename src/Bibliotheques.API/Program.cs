@@ -9,6 +9,12 @@ namespace Bibliotheques.API
 {
     public class Program
     {
+        // La classe ne sert qu'a porter le point d'entree, mais les tests
+        // fonctionnels la designent : elle ne peut pas etre statique.
+        protected Program()
+        {
+        }
+
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);

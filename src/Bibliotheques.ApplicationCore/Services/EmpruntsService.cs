@@ -119,36 +119,42 @@ namespace Bibliotheques.ApplicationCore.Services
             return nouvelEmprunt;
         }
 
-        public async Task<Emprunt?> RetournerUnEmprunt(Usager usager, Livre livreInput)
+        public async Task<Emprunt?> RetournerUnEmprunt(Usager usager, Livre livre)
         {
-            if (usager == null || livreInput == null || string.IsNullOrWhiteSpace(livreInput.CodeUnique))
+            if (usager == null || livre == null || string.IsNullOrWhiteSpace(livre.CodeUnique))
+            {
                 return null;
+            }
 
-             var livreSuivi = await _livreRepository.ListAsync();
-            var livre = livreSuivi.FirstOrDefault(l => l.CodeUnique == livreInput.CodeUnique);
+            IEnumerable<Livre> livres = await _livreRepository.ListAsync();
+            Livre? livreSuivi = livres.FirstOrDefault(l => l.CodeUnique == livre.CodeUnique);
 
-            var usagerSuivi = await _usagerRepository.ListAsync();
-            var usagerTrouve = usagerSuivi.FirstOrDefault(u => u.No == usager.No);
+            IEnumerable<Usager> usagers = await _usagerRepository.ListAsync();
+            Usager? usagerTrouve = usagers.FirstOrDefault(u => u.No == usager.No);
 
-            if (livre == null || usagerTrouve == null)
+            if (livreSuivi == null || usagerTrouve == null)
+            {
                 return null;
+            }
 
-            var emprunts = await _empruntRepository.ListAsync();
-            var empruntActif = emprunts.FirstOrDefault(e =>
-                e.LivreID == livre.ID &&
+            IEnumerable<Emprunt> emprunts = await _empruntRepository.ListAsync();
+            Emprunt? empruntActif = emprunts.FirstOrDefault(e =>
+                e.LivreID == livreSuivi.ID &&
                 e.UsagerID == usagerTrouve.ID &&
                 e.DateRetour == null);
 
             if (empruntActif == null)
+            {
                 return null;
+            }
 
-                      empruntActif.DateRetour = DateTime.Today;
+            empruntActif.DateRetour = DateTime.Today;
             await _empruntRepository.EditAsync(empruntActif);
 
-          
-            livre.Quantite += 1;
-            await _livreRepository.EditAsync(livre);
+            livreSuivi.Quantite += 1;
+            await _livreRepository.EditAsync(livreSuivi);
 
+            // Un retour apres la date limite laisse une trace au dossier.
             if (empruntActif.DateRetour > empruntActif.DateRetourLimite)
             {
                 usagerTrouve.Defaillance += 1;

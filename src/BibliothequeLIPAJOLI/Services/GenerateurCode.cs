@@ -17,7 +17,7 @@ namespace BibliothequeLIPAJOLI.Services
 
         public async Task<string> GenererCode(string categorie)
         {
-            var livresCategorie = _context.Livres.Where(l => l.Categorie == categorie).ToList();
+            var livresCategorie = await _context.Livres.Where(l => l.Categorie == categorie).ToListAsync();
 
             string strCategorie = categorie.Substring(0, 3).ToUpper(); // Code catégorie
             int numLivresCategorie = 1;

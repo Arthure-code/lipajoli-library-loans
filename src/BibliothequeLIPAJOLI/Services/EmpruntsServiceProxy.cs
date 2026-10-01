@@ -44,9 +44,9 @@ namespace BibliothequeLIPAJOLI.Services
             await _httpClient.PutAsync(_baseUrl + empruntDto.Id, content);
         }
 
-        public async Task SupprimerUnEmprunt(EmpruntDto empruntDto)
+        public async Task SupprimerUnEmprunt(EmpruntDto emprunt)
         {
-            await _httpClient.DeleteAsync(_baseUrl + empruntDto.Id);
+            await _httpClient.DeleteAsync(_baseUrl + emprunt.Id);
         }
     }
 }
