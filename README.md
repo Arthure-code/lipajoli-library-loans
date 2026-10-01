@@ -1,5 +1,14 @@
 # lipajoli-library-loans
 
+[![Build](https://github.com/Arthure-code/lipajoli-library-loans/actions/workflows/build.yml/badge.svg)](https://github.com/Arthure-code/lipajoli-library-loans/actions/workflows/build.yml)
+[![Quality gate](https://sonarcloud.io/api/project_badges/measure?project=Arthure-code_lipajoli-library-loans&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Arthure-code_lipajoli-library-loans)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Arthure-code_lipajoli-library-loans&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Arthure-code_lipajoli-library-loans)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=Arthure-code_lipajoli-library-loans&metric=bugs)](https://sonarcloud.io/summary/new_code?id=Arthure-code_lipajoli-library-loans)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=Arthure-code_lipajoli-library-loans&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=Arthure-code_lipajoli-library-loans)
+[![Security rating](https://sonarcloud.io/api/project_badges/measure?project=Arthure-code_lipajoli-library-loans&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=Arthure-code_lipajoli-library-loans)
+[![Code smells](https://sonarcloud.io/api/project_badges/measure?project=Arthure-code_lipajoli-library-loans&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=Arthure-code_lipajoli-library-loans)
+[![Duplicated lines](https://sonarcloud.io/api/project_badges/measure?project=Arthure-code_lipajoli-library-loans&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=Arthure-code_lipajoli-library-loans)
+
 A library loans desk, in two applications. An **API** holds the rules and the data, in three layers. A **web application** holds the counter staff's screens and never touches the loan tables itself: it asks the API.
 
 ASP.NET Core 8, Entity Framework Core 8, SQLite, Swagger. The site is in French.
