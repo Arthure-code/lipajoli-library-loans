@@ -28,7 +28,7 @@
     </dd>
 </dl>
 
-@if (Model.DateRetour == null)
+@if (ViewData["SuppressionPossible"] is true)
 {
     <form asp-action="Delete" method="post" class="d-inline">
         @Html.AntiForgeryToken()

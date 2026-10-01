@@ -1,4 +1,4 @@
-using BibliothequeLIPAJOLI.Controllers;
+﻿using BibliothequeLIPAJOLI.Controllers;
 using BibliothequeLIPAJOLI.DTOs;
 using BibliothequeLIPAJOLI.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -228,7 +228,7 @@ namespace BibliothequeLIPAJOLI.Tests.Controleurs
         }
 
         [Fact]
-        public async Task Retourner_RepondIntrouvableQuandLEmpruntNExistePas()
+        public async Task RetournerConfirme_RepondIntrouvableQuandLEmpruntNExistePas()
         {
             //Etant donne un identifiant qui ne designe rien
             var emprunts = new Mock<IEmpruntsService>();
@@ -237,12 +237,12 @@ namespace BibliothequeLIPAJOLI.Tests.Controleurs
                 new Mock<IUsagersServiceProxy>().Object, new Mock<ILivresServiceProxy>().Object);
 
             //Alors rien n'est retourne
-            Assert.IsType<NotFoundResult>(await controleur.Retourner(404));
+            Assert.IsType<NotFoundResult>(await controleur.RetournerConfirme(404));
             emprunts.Verify(s => s.RetournerUnEmprunt(It.IsAny<EmpruntDto>()), Times.Never);
         }
 
         [Fact]
-        public async Task Retourner_RendLEmpruntEtRevientALaListe()
+        public async Task RetournerConfirme_RendLEmpruntEtRevientALaListe()
         {
             //Etant donne un emprunt en cours
             EmpruntDto emprunt = Emprunt(1, 1, 1);
@@ -252,7 +252,7 @@ namespace BibliothequeLIPAJOLI.Tests.Controleurs
                 new Mock<IUsagersServiceProxy>().Object, new Mock<ILivresServiceProxy>().Object);
 
             //Lorsque
-            IActionResult resultat = await controleur.Retourner(1);
+            IActionResult resultat = await controleur.RetournerConfirme(1);
 
             //Alors
             emprunts.Verify(s => s.RetournerUnEmprunt(emprunt), Times.Once);

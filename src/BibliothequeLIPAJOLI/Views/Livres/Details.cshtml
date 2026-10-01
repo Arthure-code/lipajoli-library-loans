@@ -68,10 +68,10 @@
                     <th>Emprunts</th>
                 </tr>*@
                 <tr>
-                    <th>Usager</th>
-                    <th>Date de l'emprunt</th>
-                    <th>Date de retour limite</th>
-                    <th>Date de retour</th>
+                    <th scope="col">Usager</th>
+                    <th scope="col">Date de l'emprunt</th>
+                    <th scope="col">Date de retour limite</th>
+                    <th scope="col">Date de retour</th>
                 </tr>
 
                 @foreach (var item in Model.Emprunts ?? Enumerable.Empty<BibliothequeLIPAJOLI.Models.Emprunt>())

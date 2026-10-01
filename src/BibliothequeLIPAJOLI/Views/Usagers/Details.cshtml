@@ -68,14 +68,7 @@
                         couleur = "red";
                     }
 
-                    // Si il y a pas de date de retour et que la date limite est dépassée, ou 
-                    // Si il y a une date de retour mais qu'elle est plus grande que la date de retour limitte
-                    //if ((!item.DateRetour.HasValue && DateRetourLimiteBrut < DateTime.Today) || (item.DateRetour.HasValue && item.DateRetour > DateRetourLimiteBrut))// si retour sans valeur
-                    //{
-                    //    couleur = "yellow";
-                    //}
 
-                    // Si on a un valeur pour la date de retour alors on l'affiche adéquatement sinon ( Non retourné)
                     string DateRetour = "Non retourné";
                     if (item.DateRetour.HasValue)
                     {

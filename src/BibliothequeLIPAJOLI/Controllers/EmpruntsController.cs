@@ -122,10 +122,10 @@ namespace BibliothequeLIPAJOLI.Controllers
         }
 
 
-        // PUT: Emprunts/Retourner/5
-        [HttpPost]
+        // POST: Emprunts/Retourner/5
+        [HttpPost, ActionName("Retourner")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Retourner(int id)
+        public async Task<IActionResult> RetournerConfirme(int id)
         {
             var emprunt = await _empruntsService.ObtenirUnEmpruntParId(id);
             if (emprunt == null)
@@ -140,10 +140,15 @@ namespace BibliothequeLIPAJOLI.Controllers
         // GET: Emprunts/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
-            var emprunt = await _empruntsService.ObtenirUnEmpruntParId(id);
+            EmpruntDto? emprunt = await _empruntsService.ObtenirUnEmpruntParId(id);
             if (emprunt == null)
+            {
                 return NotFound();
+            }
 
+            // Un emprunt rendu appartient a l'historique : la page le dit
+            // plutot que de le recalculer.
+            ViewData["SuppressionPossible"] = emprunt.DateRetour == null;
             return View(emprunt);
         }
 
@@ -165,8 +170,8 @@ namespace BibliothequeLIPAJOLI.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Emprunts/Edit/5
-        public async Task<IActionResult> Edit(int id)
+        // GET: Emprunts/Retourner/5
+        public async Task<IActionResult> Retourner(int id)
         {
             var emprunt = await _empruntsService.ObtenirUnEmpruntParId(id);
             if (emprunt == null)
@@ -175,28 +180,5 @@ namespace BibliothequeLIPAJOLI.Controllers
             return View(emprunt);
         }
 
-        // POST: Emprunts/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, EmpruntDto empruntDto)
-        {
-            if (id != empruntDto.Id)
-                return BadRequest();
-
-            if (!ModelState.IsValid)
-                return View(empruntDto);
-
-            try
-            {
-                await _empruntsService.RetournerUnEmprunt(empruntDto);
-                TempData["Message"] = "Retour effectué avec succès.";
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                ModelState.AddModelError(string.Empty, "Une erreur est survenue lors du retour.");
-                return View(empruntDto);
-            }
-        }
     }
 }

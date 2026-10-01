@@ -50,29 +50,21 @@
     <div class="form-group">
         <label asp-for="Auteurs"></label>
         <div class="col-md-offset-2 col-md-10">
-            <table>
-                <tr>
-                    @{
-                        int cnt = 0;
-                        List<string> auteurs = ViewBag.Auteurs;
-
-                        foreach (var auteur in auteurs)
-                        {
-                            if (cnt++ % 3 == 0)
-                            {
-                            @:</tr><tr>
-                            }
-                            @:<td>
-                                <input type="checkbox"
-                                       name="auteursSelectiones"
-                                       value="@auteur"
-                                       @(Html.Raw(listeAuteursDuLivre.Contains(auteur) ? "checked=\"checked\"" : "")) />
-                                @auteur
-                            @:</td>
-                        }
-                    @:</tr>
-                    }
-                </table>
+            <div class="row">
+                @{
+                    int numeroDeLAuteur = 0;
+                    List<string> auteurs = ViewBag.Auteurs;
+                }
+                @foreach (var auteur in auteurs)
+                {
+                    string identifiant = "auteur-" + numeroDeLAuteur++;
+                    <div class="col-4">
+                        <input type="checkbox" id="@identifiant" name="auteursSelectiones" value="@auteur"
+                               @(Html.Raw(listeAuteursDuLivre.Contains(auteur) ? "checked=\"checked\"" : "")) />
+                        <label for="@identifiant">@auteur</label>
+                    </div>
+                }
+            </div>
             </div>
 
         </div>

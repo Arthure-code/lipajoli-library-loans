@@ -64,12 +64,12 @@
                     }
                 </td>
                 <td>
-                    <div class="btn-group" role="group">
+                    <div class="btn-group">
                         <a asp-action="Details" asp-route-id="@emprunt.Id" class="btn btn-sm btn-info">Détails</a>
 
                         @if (emprunt.DateRetour == null)
                         {
-                            <a asp-action="Edit" asp-route-id="@emprunt.Id" class="btn btn-sm btn-primary">Retourner</a>
+                            <a asp-action="Retourner" asp-route-id="@emprunt.Id" class="btn btn-sm btn-primary">Retourner</a>
 
                             <form asp-action="Delete" method="get" class="d-inline">
                                 @Html.AntiForgeryToken()

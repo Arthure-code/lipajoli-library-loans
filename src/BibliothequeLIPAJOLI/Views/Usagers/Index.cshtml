@@ -14,7 +14,8 @@
 <form asp-action="Index" method="get">
     <div class="form-actions no-color">
         <p>
-            Recherche d'un usager: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <label for="SearchString">Recherche d'un usager :</label>
+            <input type="text" id="SearchString" name="SearchString" value="@ViewData["CurrentFilter"]" />
             <input type="submit" value="Rechercher" class="btn btn-default" /> | 
             <a asp-action="Index">Retour à la liste d'usagers</a>
         </p>
