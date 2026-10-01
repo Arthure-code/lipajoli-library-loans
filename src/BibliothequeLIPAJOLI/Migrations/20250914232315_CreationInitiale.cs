@@ -8,6 +8,8 @@ namespace BibliothequeLIPAJOLI.Migrations
     /// <inheritdoc />
     public partial class CreationInitiale : Migration
     {
+        private static readonly string[] Colonnes = { "UsagerID", "LivreID" };
+
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -86,7 +88,7 @@ namespace BibliothequeLIPAJOLI.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Emprunt_UsagerID_LivreID",
                 table: "Emprunt",
-                columns: new[] { "UsagerID", "LivreID" },
+                columns: Colonnes,
                 unique: true);
 
             migrationBuilder.CreateIndex(

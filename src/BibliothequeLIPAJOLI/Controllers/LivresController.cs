@@ -68,9 +68,12 @@ namespace BibliothequeLIPAJOLI.Controllers
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                livres = livres.Where(l => l.Titre.ToLower().Contains(searchString.ToLower())
-                                       || (l.Auteurs ?? string.Empty).ToLower().Contains(searchString.ToLower())
-                                       || l.Categorie.ToLower().Contains(searchString.ToLower()));
+                // Like ignore la casse et se traduit en SQL, ce qu'une
+                // comparaison de chaines faite en memoire ne ferait pas.
+                string motif = $"%{searchString}%";
+                livres = livres.Where(l => EF.Functions.Like(l.Titre, motif)
+                                       || EF.Functions.Like(l.Auteurs ?? string.Empty, motif)
+                                       || EF.Functions.Like(l.Categorie, motif));
             }
 
             return View(await livres.AsNoTracking().ToListAsync());
@@ -112,7 +115,7 @@ namespace BibliothequeLIPAJOLI.Controllers
             ViewBag.Categories = RecupererCategories();
             ViewBag.Auteurs = RecupererAuteurs();
             
-            if (!auteursSelectiones.Any())
+            if (auteursSelectiones.Length == 0)
             {
                 ModelState.AddModelError("Auteurs", "Vous devez choisir au moins un auteur");
                 
@@ -261,11 +264,6 @@ namespace BibliothequeLIPAJOLI.Controllers
             }
             return View(livre);
 
-        }
-
-        private bool LivreExists(int id)
-        {
-            return _context.Livres.Any(e => e.ID == id);
         }
 
         /// <summary>

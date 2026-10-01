@@ -173,9 +173,17 @@ namespace BibliothequeLIPAJOLI.Controllers
         // GET: Emprunts/Retourner/5
         public async Task<IActionResult> Retourner(int id)
         {
-            var emprunt = await _empruntsService.ObtenirUnEmpruntParId(id);
+            EmpruntDto? emprunt = await _empruntsService.ObtenirUnEmpruntParId(id);
             if (emprunt == null)
+            {
                 return NotFound();
+            }
+
+            // On ne rend pas deux fois le meme livre.
+            if (emprunt.DateRetour != null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
 
             return View(emprunt);
         }

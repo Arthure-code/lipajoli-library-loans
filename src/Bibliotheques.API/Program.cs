@@ -15,6 +15,12 @@ namespace Bibliotheques.API
         {
         }
 
+        // Une adresse absente laisse simplement le lien vide dans la fiche.
+        private static Uri? Adresse(string? valeur)
+        {
+            return string.IsNullOrWhiteSpace(valeur) ? null : new Uri(valeur);
+        }
+
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -33,13 +39,13 @@ namespace Bibliotheques.API
                     Description = "Gestion des emprunts de la bibliothèque LIPAJOLI",
                     License = new OpenApiLicense
                     {
-                        Name = "MIT",
-                        Url = new Uri("https://opensource.org/licenses/MIT")
+                        Name = builder.Configuration["Documentation:Licence"],
+                        Url = Adresse(builder.Configuration["Documentation:LicenceUrl"])
                     },
                     Contact = new OpenApiContact
                     {
-                        Name = "Arthure Lekoubou Djune",
-                        Url = new Uri("https://github.com/Arthure-code")
+                        Name = builder.Configuration["Documentation:Auteur"],
+                        Url = Adresse(builder.Configuration["Documentation:AuteurUrl"])
                     }
                 });
 

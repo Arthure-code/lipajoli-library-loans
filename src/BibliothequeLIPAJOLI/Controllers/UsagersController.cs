@@ -16,12 +16,10 @@ namespace BibliothequeLIPAJOLI.Controllers
         private const string Erreur = "Error";
 
         private readonly BibliothequeContext _context;
-        private readonly IConfiguration _config;
 
-        public UsagersController(BibliothequeContext context, IConfiguration config)
+        public UsagersController(BibliothequeContext context)
         {
             _context = context;
-            _config = config;
         }
 
         public async Task<IActionResult> Index(string searchString)
@@ -33,8 +31,10 @@ namespace BibliothequeLIPAJOLI.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                usagers = usagers.Where(u => u.Nom.ToLower().Contains(searchString.ToLower())
-                                       || u.Prenom.ToLower().Contains(searchString.ToLower()));
+                // Like ignore la casse et se traduit en SQL.
+                string motif = $"%{searchString}%";
+                usagers = usagers.Where(u => EF.Functions.Like(u.Nom, motif)
+                                       || EF.Functions.Like(u.Prenom, motif));
             }
 
             return View(await usagers.AsNoTracking().ToListAsync());
@@ -193,11 +193,6 @@ namespace BibliothequeLIPAJOLI.Controllers
                 return RedirectToAction(nameof(Index));
            
 
-        }
-
-        private bool UsagerExists(int id)
-        {
-            return _context.Usagers.Any(e => e.ID == id);
         }
 
     }

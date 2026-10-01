@@ -1,4 +1,4 @@
-using Bibliotheques.ApplicationCore.Entites;
+﻿using Bibliotheques.ApplicationCore.Entites;
 using Bibliotheques.ApplicationCore.Interfaces;
 using Bibliotheques.Infrastructure.Data;
 
@@ -7,7 +7,7 @@ namespace Bibliotheques.Infrastructure.TestsIntegration
     public class AsyncRepositoryTest : IDisposable
     {
         private readonly BaseNeuve _base = new BaseNeuve();
-        private readonly IAsyncRepository<Livre> _livres;
+        private readonly AsyncRepository<Livre> _livres;
 
         public AsyncRepositoryTest()
         {
@@ -110,7 +110,7 @@ namespace Bibliotheques.Infrastructure.TestsIntegration
         public async Task LeMemeDepotServaitPourChaqueEntite()
         {
             //Etant donne le depot generique monte sur les usagers
-            IAsyncRepository<Usager> usagers = new AsyncRepository<Usager>(_base.Context);
+            AsyncRepository<Usager> usagers = new AsyncRepository<Usager>(_base.Context);
 
             //Lorsque
             await usagers.AddAsync(new Usager

@@ -1,16 +1,11 @@
 ﻿@model BibliothequeLIPAJOLI.Models.Livre
 
 @{
-    //si les ISBN sont deja dans la BD, on renvoie la view avec les auteurs ajoutés au Livre
-    //on veut garder les auteurs que l'utilisateur a déjà sélectionné cochés dans les checkbox
+    // Les auteurs deja choisis restent coches quand la page revient.
     var listeAuteursDuLive = new List<string>();
-    if (Model != null)
+    if (Model?.Auteurs != null)
     {
-        if (Model.Auteurs != null)
-        {
-            listeAuteursDuLive = Model.Auteurs.Split(", ").ToList();
-        }
-
+        listeAuteursDuLive = Model.Auteurs.Split(", ").ToList();
     }
 }
 

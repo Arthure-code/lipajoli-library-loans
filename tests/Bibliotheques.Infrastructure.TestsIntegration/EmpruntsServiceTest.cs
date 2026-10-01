@@ -1,4 +1,4 @@
-using Bibliotheques.ApplicationCore.Entites;
+﻿using Bibliotheques.ApplicationCore.Entites;
 using Bibliotheques.ApplicationCore.Interfaces;
 using Bibliotheques.ApplicationCore.Services;
 using Bibliotheques.Infrastructure.Data;
@@ -11,9 +11,9 @@ namespace Bibliotheques.Infrastructure.TestsIntegration
         private const int JoursDePret = 10;
 
         private readonly BaseNeuve _base = new BaseNeuve();
-        private readonly IAsyncRepository<Livre> _livres;
-        private readonly IAsyncRepository<Usager> _usagers;
-        private readonly IAsyncRepository<Emprunt> _emprunts;
+        private readonly AsyncRepository<Livre> _livres;
+        private readonly AsyncRepository<Usager> _usagers;
+        private readonly AsyncRepository<Emprunt> _emprunts;
         private readonly EmpruntsService _service;
 
         public EmpruntsServiceTest()

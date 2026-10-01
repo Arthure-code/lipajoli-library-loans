@@ -160,7 +160,7 @@ namespace Bibliotheques.API.Controllers
                 No = empruntDto.Usager.No,
                 Nom = empruntDto.Usager.Nom,
                 Prenom = empruntDto.Usager.Prenom,
-                Statut = (Statut)empruntDto.Usager.Statut,
+                Statut = empruntDto.Usager.Statut,
                 Defaillance = empruntDto.Usager.Defaillance,
                 Courriel = empruntDto.Usager.Courriel
             };
@@ -235,7 +235,7 @@ namespace Bibliotheques.API.Controllers
                 No = empruntDto.Usager.No,
                 Nom = empruntDto.Usager.Nom,
                 Prenom = empruntDto.Usager.Prenom,
-                Statut = (Statut)empruntDto.Usager.Statut,
+                Statut = empruntDto.Usager.Statut,
                 Defaillance = empruntDto.Usager.Defaillance,
                 Courriel = empruntDto.Usager.Courriel
             };

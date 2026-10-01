@@ -40,7 +40,7 @@ namespace BibliothequeLIPAJOLI.Services
                 return 0;
             }
 
-            return int.TryParse(code.Substring(3, 3), out int numero) ? numero : 0;
+            return int.TryParse(code.AsSpan(3, 3), out int numero) ? numero : 0;
         }
     }
 }
