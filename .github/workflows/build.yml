@@ -46,9 +46,13 @@ jobs:
           # de l'etape : des tests en echec passeraient inapercus.
           $ErrorActionPreference = "Stop"
           $PSNativeCommandUseErrorActionPreference = $true
+          # Les migrations sont ecrites par Entity Framework : deux
+          # fichiers generes a partir du meme modele se ressemblent, et
+          # personne ne les relit. Ils sortent de la mesure de duplication,
+          # pas de l analyse.
           # La solution de l'API porte les quatre projets d'application et
           # les quatre projets de test : elle couvre tout le depot.
-          ${{ runner.temp }}\scanner\dotnet-sonarscanner begin /k:"Arthure-code_lipajoli-library-loans" /o:"arthuredevsecops" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.cs.cobertura.reportsPaths="**/coverage.cobertura.xml"
+          ${{ runner.temp }}\scanner\dotnet-sonarscanner begin /k:"Arthure-code_lipajoli-library-loans" /o:"arthuredevsecops" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.cs.cobertura.reportsPaths="**/coverage.cobertura.xml" /d:sonar.cpd.exclusions="**/Migrations/**"
           dotnet build Bibliotheques.API.sln
           dotnet test Bibliotheques.API.sln --no-build --collect:"XPlat Code Coverage"
           ${{ runner.temp }}\scanner\dotnet-sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
