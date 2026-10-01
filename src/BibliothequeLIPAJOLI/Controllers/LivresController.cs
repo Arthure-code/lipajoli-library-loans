@@ -15,6 +15,9 @@ namespace BibliothequeLIPAJOLI.Controllers
 {
     public class LivresController : Controller
     {
+        private const string Erreur = "Error";
+        private const string TitreDescendant = "titre_desc";
+
         private readonly BibliothequeContext _context;
         private readonly IConfiguration _config;
         private readonly IGenerateurCode _generateurCode;
@@ -34,14 +37,14 @@ namespace BibliothequeLIPAJOLI.Controllers
                 ViewData["TriParCodeUnique"] = "code_unique_desc";
             }
 
-            ViewData["TriParTitre"] = "titre_desc";
-            if (ordreTri == "titre_desc")
+            ViewData["TriParTitre"] = TitreDescendant;
+            if (ordreTri == TitreDescendant)
             {
                 ViewData["TriParTitre"] = "titre";
             }
             else if (ordreTri == "titre")
             {
-                ViewData["TriParTitre"] = "titre_desc";
+                ViewData["TriParTitre"] = TitreDescendant;
             }
 
             var livres = from l in _context.Livres
@@ -55,7 +58,7 @@ namespace BibliothequeLIPAJOLI.Controllers
                 case "titre":
                     livres = livres.OrderBy(l => l.Titre);
                     break;
-                case "titre_desc":
+                case TitreDescendant:
                     livres = livres.OrderByDescending(l => l.Titre);
                     break;
                 default:
@@ -77,7 +80,7 @@ namespace BibliothequeLIPAJOLI.Controllers
         {
             if (id == null)
             {
-                return View("Error");
+                return View(Erreur);
             }
 
             var livre = await _context.Livres
@@ -88,7 +91,7 @@ namespace BibliothequeLIPAJOLI.Controllers
 
             if (livre == null)
             {
-                return View("Error");
+                return View(Erreur);
             }
 
             return View(livre);
@@ -143,48 +146,57 @@ namespace BibliothequeLIPAJOLI.Controllers
 
             if (id == null)
             {
-                return View("Error");
+                return View(Erreur);
             }
 
             var livre = await _context.Livres.FindAsync(id);
 
             if (livre == null)
             {
-                return View("Error");
+                return View(Erreur);
             }
             return View(livre);
         }
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditLivre([Bind("Isbn10,Isbn13,Titre,Quantite,Prix,Auteurs,Categorie")] int? id, Livre livre, string[] auteursSelectiones)
+        public async Task<IActionResult> EditLivre([FromRoute] int? id, Livre livre, string[] auteursSelectiones)
         {
+            if (id == null)
+            {
+                return View(Erreur);
+            }
 
             ViewBag.Categories = RecupererCategories();
             ViewBag.Auteurs = RecupererAuteurs();
 
-            VerifierISBN10et13(livre);
+            Livre? livreEnBase = await _context.Livres.AsNoTracking()
+                .FirstOrDefaultAsync(l => l.ID == id);
 
-            var categorieLivreAvantModif = (await _context.Livres.AsNoTracking()
-                .SingleAsync(l => l.ID == livre.ID)).Categorie;
-
-            if (categorieLivreAvantModif != livre.Categorie)
+            if (livreEnBase == null)
             {
-                livre.CodeUnique = await _generateurCode.GenererCode(livre.Categorie);
+                return View(Erreur);
             }
+
+            VerifierISBN10et13(livre, livreEnBase.ID);
+
+            // L'identite du livre ne vient pas du formulaire : sa cle est
+            // dans l'adresse, et son code appartient a la bibliotheque, qui
+            // ne le refait que si la categorie change.
+            livre.ID = livreEnBase.ID;
+            livre.CodeUnique = livreEnBase.Categorie == livre.Categorie
+                ? livreEnBase.CodeUnique
+                : await _generateurCode.GenererCode(livre.Categorie);
 
             livre.Auteurs = ListeAuteursEnString(auteursSelectiones);
 
-           
-
             if (ModelState.IsValid)
             {
-                
-                    _context.Update(livre);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                
+                _context.Update(livre);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
+
             return View(livre);
         }
 
@@ -192,7 +204,7 @@ namespace BibliothequeLIPAJOLI.Controllers
         {
             if (id == null)
             {
-                return View("Error");
+                return View(Erreur);
             }
 
             var livre = await _context.Livres
@@ -201,7 +213,7 @@ namespace BibliothequeLIPAJOLI.Controllers
 
             if (livre == null)
             {
-                return View("Error");
+                return View(Erreur);
             }
 
             if (saveChangesError.GetValueOrDefault())
@@ -214,7 +226,7 @@ namespace BibliothequeLIPAJOLI.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed([FromRoute] int id)
         {
             var livre = await _context.Livres
                 .Include(e => e.Emprunts)
@@ -279,37 +291,28 @@ namespace BibliothequeLIPAJOLI.Controllers
         /// </summary>
         /// <param name="auteurs">Un tableau d'auteurs</param>
         /// <returns>La liste des auteurs en string</returns>
-        private string ListeAuteursEnString(string[] auteurs)
+        private static string ListeAuteursEnString(string[] auteurs)
         {
             return string.Join(", ", auteurs);
         }
 
 
 
-        /// <summary>
-        /// Une méthode pour vérifier si les ISBN ont déjà été enregistrés
-        /// </summary>
-        /// <param name="livreAVerifieer"></param>
-        /// <returns>True si la BD contient au moins un des ISBN</returns>
-        private bool VerifierISBN10et13(Livre livreAVerifieer)
+        // Un livre n'est pas son propre doublon : quand on le modifie, on
+        // compare son ISBN a celui des autres, pas au sien.
+        private void VerifierISBN10et13(Livre livreAVerifier, int identifiantAIgnorer = 0)
         {
-            bool contientISBN = false;
-            var isbn10 = _context.Livres.Select(i => i.Isbn10);
-            var isbn13 = _context.Livres.Select(i => i.Isbn13);
+            IQueryable<Livre> autresLivres = _context.Livres.Where(l => l.ID != identifiantAIgnorer);
 
-            if (isbn10.Contains(livreAVerifieer.Isbn10))
+            if (autresLivres.Any(l => l.Isbn10 == livreAVerifier.Isbn10))
             {
                 ModelState.AddModelError("Isbn10", "Cet ISBN10 est déjà enregistré.");
-                contientISBN = true;
             }
-            if (isbn13.Contains(livreAVerifieer.Isbn13))
+
+            if (autresLivres.Any(l => l.Isbn13 == livreAVerifier.Isbn13))
             {
                 ModelState.AddModelError("Isbn13", "Cet ISBN13 est déjà enregistré.");
-                contientISBN = true;
             }
-
-            return contientISBN;
-
-        }     
+        }
     }
 }

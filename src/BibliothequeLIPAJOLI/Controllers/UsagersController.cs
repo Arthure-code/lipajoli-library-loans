@@ -13,6 +13,8 @@ namespace BibliothequeLIPAJOLI.Controllers
 {
     public class UsagersController : Controller
     {
+        private const string Erreur = "Error";
+
         private readonly BibliothequeContext _context;
         private readonly IConfiguration _config;
 
@@ -44,7 +46,7 @@ namespace BibliothequeLIPAJOLI.Controllers
         {
             if (id == null)
             {
-                return View("Error");
+                return View(Erreur);
             }
 
             var usager = await _context.Usagers
@@ -55,7 +57,7 @@ namespace BibliothequeLIPAJOLI.Controllers
 
             if (usager == null)
             {
-                return View("Error");
+                return View(Erreur);
             }
 
             return View(usager);
@@ -101,13 +103,13 @@ namespace BibliothequeLIPAJOLI.Controllers
         {
             if (id == null)
             {
-                return View("Error");
+                return View(Erreur);
             }
 
             var usager = await _context.Usagers.FindAsync(id);
             if (usager == null)
             {
-                return View("Error");
+                return View(Erreur);
             }
 
             return View(usager);
@@ -115,11 +117,11 @@ namespace BibliothequeLIPAJOLI.Controllers
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditPost(int? id)
+        public async Task<IActionResult> EditPost([FromRoute] int? id)
         {
             if (id == null)
             {
-                return View("Error");
+                return View(Erreur);
             }
 
             var usagerAModifier = await _context.Usagers
@@ -127,7 +129,7 @@ namespace BibliothequeLIPAJOLI.Controllers
 
             if (usagerAModifier == null)         
             {
-                return View("Error");
+                return View(Erreur);
             }
 
             if (await TryUpdateModelAsync<Usager>(usagerAModifier, "", u => u.Nom, u => u.Prenom, u => u.Statut, u => u.Defaillance, u => u.Courriel)) // SH - Ajouter le nombre de livre emprunte si on determine que c'est pertinant pour la suite
@@ -152,7 +154,7 @@ namespace BibliothequeLIPAJOLI.Controllers
         {
             if (id == null)
             {
-                return View("Error");
+                return View(Erreur);
             }
 
             var usager = await _context.Usagers
@@ -160,7 +162,7 @@ namespace BibliothequeLIPAJOLI.Controllers
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (usager == null)
             {
-                return View("Error");
+                return View(Erreur);
             }
 
             if (saveChangesError.GetValueOrDefault())
@@ -173,7 +175,7 @@ namespace BibliothequeLIPAJOLI.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed([FromRoute] int id)
         {
             var usager = await _context.Usagers
                 .Include(u => u.Emprunts)

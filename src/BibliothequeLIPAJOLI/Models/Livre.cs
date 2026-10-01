@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BibliothequeLIPAJOLI.Validation;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
@@ -15,9 +16,11 @@ namespace BibliothequeLIPAJOLI.Models
     [Index(nameof(Isbn13))]
     public class Livre
     {
+        [BindNever]
         public int ID { get; set; }
 
         [Display(Name = "Code")]
+        [BindNever]
         public string? CodeUnique { get; set; }
 
 
